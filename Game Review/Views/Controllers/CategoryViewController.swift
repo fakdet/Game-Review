@@ -9,10 +9,10 @@ import UIKit
 
 class CategoryViewController: UIViewController{
     
-    //MARK: - Properties
+    //MARK: Properties
     private let viewModel = CategoryListViewModel()
     
-    //MARK: - UI elements
+    //MARK: UI elements
     //Just the title on top of the collection view.
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -88,7 +88,8 @@ extension CategoryViewController: UICollectionViewDelegate, UICollectionViewData
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath){
         let category = viewModel.category(at: indexPath.item)
-        print("Clicked: \(category.name)")
+        let vc = GameListViewController()
+        navigationController?.pushViewController(vc, animated: true)       
     }
     
     
