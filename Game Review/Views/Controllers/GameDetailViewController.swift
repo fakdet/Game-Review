@@ -11,12 +11,15 @@ class GameDetailViewController: UIViewController {
     
     //MARK: - Properties
     private var viewModel: GameDetailViewModel
+    private var isEditingReview: Bool = false
     
     
     //MARK: - UI Elements
     private let scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.translatesAutoresizingMaskIntoConstraints = false
+        sv.delaysContentTouches = false
+        sv.canCancelContentTouches = true
         return sv
     }()
     
@@ -165,9 +168,10 @@ class GameDetailViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         title = viewModel.title
-        
+                
         setupUI()
         populateData()
+        setupActions()
     }
     
     private func setupUI() {
@@ -279,10 +283,95 @@ class GameDetailViewController: UIViewController {
         return row.bottomAnchor
     }
     
+    private func setupActions() {
+        graphicsSlider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
+        soundSlider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
+        artSlider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
+        gameplaySlider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
+        storySlider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
+        overallSlider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
+        
+        editButton.addTarget(self, action: #selector(editTapped), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
+    }
+    
+    @objc private func sliderChanged(_ sender: UISlider){
+        sender.value = round(sender.value * 10) / 10 //For snapping it to 1 decimal
+        updateValueLabels()
+    }
+    
+    private func updateValueLabels(){
+        graphicsValueLabel.text = String(format: "%.1f", graphicsSlider.value)
+        soundValueLabel.text = String(format: "%.1f", soundSlider.value)
+        artValueLabel.text = String(format: "%.1f", artSlider.value)
+        gameplayValueLabel.text = String(format: "%.1f", gameplaySlider.value)
+        storyValueLabel.text = String(format: "%.1f", storySlider.value)
+        overallValueLabel.text = String(format: "%.1f", overallSlider.value)
+    }
+    
+    private func setEditingMode(_ editing: Bool) {
+        isEditingReview = editing
+        
+        let sliders = [graphicsSlider, soundSlider, artSlider, gameplaySlider, storySlider, overallSlider]
+        sliders.forEach { $0.isUserInteractionEnabled = editing }
+        sliders.forEach { $0.alpha = editing ? 1.0 : 0.5}
+        
+        reviewTextView.isEditable = editing
+        reviewTextView.alpha = editing ? 1.0 : 0.8
+        
+        saveButton.isHidden = !editing
+        editButton.setTitle(editing ? "Cancel" : "Edit", for: .normal)
+    }
+    
+    @objc private func editTapped() {
+        if isEditingReview {
+            //reload original data
+            populateData()
+            setEditingMode(false)
+        } else {
+            setEditingMode(true)
+        }
+    }
+    
+    @objc private func saveTapped() {
+        viewModel.saveReview(
+            graphics:    Double(graphicsSlider.value),
+            soundDesign: Double(soundSlider.value),
+            artDesign:   Double(artSlider.value),
+            gameplay:    Double(gameplaySlider.value),
+            story:       Double(storySlider.value),
+            overall:     Double(overallSlider.value),
+            text: reviewTextView.text ?? ""
+        )
+        
+        setEditingMode(false)
+        editButton.isHidden = false
+        statusLabel.text = "Status: \(viewModel.status)"
+    }
+    
     private func populateData(){
         gameTitleLabel.text = viewModel.title
         publisherLabel.text = "Publisher: \(viewModel.publisher)"
         releaseDateLabel.text = "Release Date: \(viewModel.releaseDate)"
         statusLabel.text = "Status: \(viewModel.status)"
+        
+        if viewModel.hasReview {
+            graphicsSlider.value = Float(viewModel.graphics)
+            soundSlider.value = Float(viewModel.soundDesign)
+            artSlider.value = Float(viewModel.artDesign)
+            gameplaySlider.value = Float(viewModel.gameplay)
+            storySlider.value = Float(viewModel.story)
+            overallSlider.value = Float(viewModel.overallRating)
+            
+            reviewTextView.text = viewModel.reviewText
+            reviewTextView.textColor = .label
+            updateValueLabels()
+            
+            setEditingMode(false)
+            editButton.isHidden = false
+        } else {
+            setEditingMode(true)
+            editButton.isHidden = true
+        }
     }
 }
