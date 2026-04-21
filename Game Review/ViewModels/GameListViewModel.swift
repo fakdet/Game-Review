@@ -75,4 +75,16 @@ class GameListViewModel{
         }
     }
     
+    func filterByStatus(_ status: GameStatus?){
+        if let status = status {
+            filteredGames = games.filter {
+                $0.categoryIDs.contains(currentCategory?.id ?? -1) &&
+                $0.status == status
+            }
+        } else {
+            //status variable can be null, this just means it will show all.
+            filterGames(by: currentCategory!)
+        }
+    }
+    
 }

@@ -33,11 +33,23 @@ class GameListViewController: UIViewController {
         return button
     }()
     
+    private let emptyLabel: UILabel = {
+        let label = UILabel()
+        label.text = "No games were found based on your search results"
+        label.textAlignment = .center
+        label.textColor = .secondaryLabel
+        label.font = .systemFont(ofSize: 16, weight: .medium)
+        label.numberOfLines = 0
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         
         searchBar.delegate = self
+        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+
         
         if let category = category{
             title = category.name
@@ -66,8 +78,8 @@ class GameListViewController: UIViewController {
         tableView.backgroundColor = .systemGray6
         tableView.layer.cornerRadius = 10
         tableView.clipsToBounds = true
-        
         tableView.separatorStyle = .none
+        
         
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -82,7 +94,49 @@ class GameListViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
-    }   
+    }
+    
+    @objc private func filterButtonTapped(){
+        let actionSheet = UIAlertController(title: "Filter By Status", message: nil, preferredStyle: .actionSheet)
+        
+        actionSheet.addAction(UIAlertAction(title: "All", style: .default) { _ in
+            self.viewModel.filterByStatus(nil)
+            self.updateTableView()
+        })
+        
+        actionSheet.addAction(UIAlertAction(title: "Unplayed", style: .default) { _ in
+            self.viewModel.filterByStatus(.unplayed)
+            self.updateTableView()
+        })
+        
+        actionSheet.addAction(UIAlertAction(title: "Playing", style: .default) { _ in
+            self.viewModel.filterByStatus(.playing)
+            self.updateTableView()
+        })
+        
+        actionSheet.addAction(UIAlertAction(title: "Finished", style: .default) { _ in
+            self.viewModel.filterByStatus(.finished)
+            self.updateTableView()
+        })
+        
+        actionSheet.addAction(UIAlertAction(title: "Reviewed", style: .default) { _ in
+            self.viewModel.filterByStatus(.reviewed)
+            self.updateTableView()
+        })
+        
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        present(actionSheet, animated: true)
+    }
+    
+    private func updateEmptyState() {
+        tableView.backgroundView = viewModel.numberOfItems() == 0 ? emptyLabel : nil
+    }
+    
+    private func updateTableView() {
+        tableView.reloadData()
+        self.updateEmptyState()
+    }
 }
 
 extension GameListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -101,6 +155,6 @@ extension GameListViewController: UITableViewDelegate, UITableViewDataSource {
 extension GameListViewController: UISearchBarDelegate{
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         viewModel.filterGames(by: searchText)
-        tableView.reloadData()
+        self.updateTableView()
     }
 }
