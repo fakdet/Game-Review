@@ -238,6 +238,13 @@ extension GameListViewController: UITableViewDelegate, UITableViewDataSource {
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let game = viewModel.game(at: indexPath.row)
+        let detailVC = GameDetailViewController(game: game)
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
 }
 
 extension GameListViewController: UISearchBarDelegate{

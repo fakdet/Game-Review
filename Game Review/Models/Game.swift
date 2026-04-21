@@ -7,9 +7,11 @@
 
 struct Game{
     let id: Int
-    let title: String
-    let categoryIDs: [Int] //category link - Many - Many relation
-    
-    let rating: Double? // There can be no rating for a game at all. Needs to be handled.
-    let status: GameStatus
+    var title: String
+    var categoryIDs: [Int] //category link - Many - Many relation
+    var rating: Double? // There can be no rating for a game at all. Needs to be handled.
+    var status: GameStatus
+    var publisher: String?
+    var releaseDate: String?
+    var review: Review?
 }
