@@ -87,4 +87,8 @@ class GameListViewModel{
         }
     }
     
+    func count(for status: GameStatus) -> Int{
+        return filteredGames.filter { $0.status == status }.count
+    }
+    
 }
