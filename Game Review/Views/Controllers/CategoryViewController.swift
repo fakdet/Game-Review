@@ -89,7 +89,8 @@ extension CategoryViewController: UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath){
         let category = viewModel.category(at: indexPath.item)
         let vc = GameListViewController()
-        navigationController?.pushViewController(vc, animated: true)       
+        vc.category = category
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     

@@ -12,6 +12,7 @@ class GameListViewController: UIViewController {
     
     //MARK: Properties
     private let viewModel = GameListViewModel()
+    var category: Category?
     
     //MARK: UI elements
     
@@ -19,12 +20,14 @@ class GameListViewController: UIViewController {
     
     private let searchBar: UISearchBar = {
        let searchBar = UISearchBar()
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.placeholder = "Search for a game"
         return searchBar
     }()
     
     private let filterButton: UIButton = {
         let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Filter", for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
         return button
@@ -33,6 +36,11 @@ class GameListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
+        if let category = category{
+            title = category.name
+            viewModel.filterGames(by: category)
+        }
         setupUI()
     }
     
@@ -58,16 +66,31 @@ class GameListViewController: UIViewController {
         tableView.clipsToBounds = true
         
         tableView.separatorStyle = .none
-    }
+        
+        NSLayoutConstraint.activate([
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            filterButton.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 8),
+            filterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
+            tableView.topAnchor.constraint(equalTo: filterButton.bottomAnchor, constant: 8),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+    }   
 }
 
 extension GameListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return viewModel.numberOfItems()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! GameCell
+        cell.configure(with: viewModel.game(at: indexPath.row))
         
         return cell
     }

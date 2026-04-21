@@ -32,18 +32,25 @@ class GameCell: UITableViewCell{
         ratingLabel.translatesAutoresizingMaskIntoConstraints = false
         statusLabel.translatesAutoresizingMaskIntoConstraints = false
         
+        titleLabel.numberOfLines = 1
+        ratingLabel.numberOfLines = 1
+        statusLabel.numberOfLines = 1
+        
         NSLayoutConstraint.activate([
             //LEFT - Game Name
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            titleLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.4),
             
             //CENTER - Rating
             ratingLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             ratingLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            ratingLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.25),
             
             //RIGHT
             statusLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            statusLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            statusLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            statusLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.25),
         ])
         
         
@@ -51,6 +58,8 @@ class GameCell: UITableViewCell{
         ratingLabel.font = .systemFont(ofSize: 14, weight: .medium)
         statusLabel.font = .systemFont(ofSize: 14, weight: .medium)
         
+        ratingLabel.textAlignment = .center
+        statusLabel.textAlignment = .right
         statusLabel.textColor = .systemBlue
     }
 

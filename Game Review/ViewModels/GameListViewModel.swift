@@ -48,16 +48,22 @@ class GameListViewModel{
             Game(id: 18, title: "Persona 5 Royal", categoryIDs: [2, 10], rating: 9.7, status: .reviewed) // RPG, JRPG
         ]
     
+    private var filteredGames: [Game] = []
+    
     func numberOfItems() -> Int{
-        return games.count
+        return filteredGames.count
     }
     
     func game(at index: Int) -> Game{
-        return games[index]
+        return filteredGames[index]
     }
     
     func title(for index:Int) -> String{
-        return games[index].title
+        return filteredGames[index].title
+    }
+    
+    func filterGames(by category: Category){
+        filteredGames = games.filter { $0.categoryIDs.contains(category.id) }
     }
     
 }
