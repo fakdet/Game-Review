@@ -10,7 +10,14 @@ import UIKit
 class GameCell: UITableViewCell{
     private let titleLabel = UILabel()
     private let ratingLabel = UILabel()
-    private let statusLabel = UILabel()
+    private let statusButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.showsMenuAsPrimaryAction = true // To open the dropdown menu
+        return button
+    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -26,15 +33,13 @@ class GameCell: UITableViewCell{
     {
         contentView.addSubview(titleLabel)
         contentView.addSubview(ratingLabel)
-        contentView.addSubview(statusLabel)
+        contentView.addSubview(statusButton)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         ratingLabel.translatesAutoresizingMaskIntoConstraints = false
-        statusLabel.translatesAutoresizingMaskIntoConstraints = false
         
         titleLabel.numberOfLines = 1
         ratingLabel.numberOfLines = 1
-        statusLabel.numberOfLines = 1
         
         NSLayoutConstraint.activate([
             //LEFT - Game Name
@@ -48,22 +53,21 @@ class GameCell: UITableViewCell{
             ratingLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.25),
             
             //RIGHT
-            statusLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            statusLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            statusLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.25),
+            statusButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            statusButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            statusButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.25),
         ])
         
         
         titleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
         ratingLabel.font = .systemFont(ofSize: 14, weight: .medium)
-        statusLabel.font = .systemFont(ofSize: 14, weight: .medium)
         
         ratingLabel.textAlignment = .center
-        statusLabel.textAlignment = .right
-        statusLabel.textColor = .systemBlue
     }
-
-    func configure(with game: Game){
+    
+    
+    
+    func configure(with game: Game, onStatusChange: @escaping (GameStatus) -> Void){
         titleLabel.text = game.title
         
         if let rating = game.rating {
@@ -74,13 +78,26 @@ class GameCell: UITableViewCell{
         
         switch game.status {
         case .unplayed:
-            statusLabel.text = "Unplayed"
+            statusButton.setTitle("Unplayed", for: .normal)
         case .playing:
-            statusLabel.text = "Playing"
+            statusButton.setTitle("Playing", for: .normal)
         case .finished:
-            statusLabel.text = "Finished"
+            statusButton.setTitle("Finished", for: .normal)
         case .reviewed:
-            statusLabel.text = "Reviewed"
+            statusButton.setTitle("Reviewed", for: .normal)
         }
+        
+        //Dropdown menu build
+        statusButton.menu = UIMenu(title: "Change Status", children: [
+            UIAction(title: "Unplayed", image: UIImage(systemName: "circle")) { _ in
+                onStatusChange(.unplayed)
+            },
+            UIAction(title: "Playing", image: UIImage(systemName: "play.circle")) { _ in
+                onStatusChange(.playing)
+            },
+            UIAction(title: "Finished", image: UIImage(systemName: "checkmark.circle")) { _ in
+                onStatusChange(.finished)
+            },
+        ])
     }
 }

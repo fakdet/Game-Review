@@ -91,4 +91,24 @@ class GameListViewModel{
         return filteredGames.filter { $0.status == status }.count
     }
     
+    func changeStatus(of game: Game, to newStatus: GameStatus) {
+        guard let index = games.firstIndex(where: { $0.id == game.id }) else { return }
+        
+        var updatedGame = games[index]
+        
+        updatedGame = Game(
+            id: updatedGame.id,
+            title: updatedGame.title,
+            categoryIDs: updatedGame.categoryIDs,
+            rating: updatedGame.status == .reviewed ? nil : updatedGame.rating,  // delete rating if was reviewed
+            status: newStatus
+        )
+        
+        games[index] = updatedGame
+        
+        if let category = currentCategory {
+            filterGames(by: category)
+        }
+    }
+    
 }

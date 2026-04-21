@@ -227,7 +227,14 @@ extension GameListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! GameCell
-        cell.configure(with: viewModel.game(at: indexPath.row))
+        let game = viewModel.game(at: indexPath.row)
+        
+        cell.configure(with: game) { [weak self] newStatus in
+            self?.viewModel.changeStatus(of: game, to: newStatus)
+            self?.tableView.reloadRows(at: [indexPath], with: .automatic)  // ← only reload this row
+            self?.updateFooter()
+            self?.updateEmptyState()
+        }
         
         return cell
     }
