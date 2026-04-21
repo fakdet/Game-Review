@@ -37,6 +37,8 @@ class GameListViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         
+        searchBar.delegate = self
+        
         if let category = category{
             title = category.name
             viewModel.filterGames(by: category)
@@ -93,5 +95,12 @@ extension GameListViewController: UITableViewDelegate, UITableViewDataSource {
         cell.configure(with: viewModel.game(at: indexPath.row))
         
         return cell
+    }
+}
+
+extension GameListViewController: UISearchBarDelegate{
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel.filterGames(by: searchText)
+        tableView.reloadData()
     }
 }

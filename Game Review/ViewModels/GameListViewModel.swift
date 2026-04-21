@@ -8,6 +8,7 @@
 import Foundation
 
 class GameListViewModel{
+    private var currentCategory: Category?
     //MARK: This game array is temporary, will change later and be filled with API.
         private var games: [Game] = [
 
@@ -63,7 +64,15 @@ class GameListViewModel{
     }
     
     func filterGames(by category: Category){
+        currentCategory = category
         filteredGames = games.filter { $0.categoryIDs.contains(category.id) }
+    }
+    
+    func filterGames(by searchText: String){
+        filteredGames = games.filter { $0.categoryIDs.contains(currentCategory?.id ?? -1) }
+        if !searchText.isEmpty{
+            filteredGames = filteredGames.filter { $0.title.lowercased().contains(searchText.lowercased()) }
+        }
     }
     
 }
