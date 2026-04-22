@@ -75,10 +75,10 @@ class GameListViewController: UIViewController {
         searchBar.delegate = self
         filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         
-        
+        bindViewModel()
         if let category = category{
             title = category.name
-            viewModel.filterGames(by: category)
+            viewModel.fetchGames(for: category)
         }
         setupUI()
     }
@@ -217,6 +217,15 @@ class GameListViewController: UIViewController {
         tableView.reloadData()
         updateEmptyState()
         updateFooter()
+    }
+    
+    private func bindViewModel() {
+        viewModel.onDataUpdated = { [weak self] in
+            self?.updateTableView()
+        }
+        viewModel.onError = { error in
+            print("Error!: \(error)")
+        }
     }
 }
 

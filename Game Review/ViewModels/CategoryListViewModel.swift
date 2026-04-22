@@ -9,18 +9,23 @@ import Foundation
 
 class CategoryListViewModel{
     //MARK: - This category array is temporary, will change later and be filled with API.
-    private var categories: [Category] = [
-        Category(id: 1, name: "Action"),
-        Category(id: 2, name: "RPG"),
-        Category(id: 3, name: "Shooter"),
-        Category(id: 4, name: "Racing"),
-        Category(id: 5, name: "Survival"),
-        Category(id: 6, name: "Horror"),
-        Category(id: 7, name: "Puzzle"),
-        Category(id: 8, name: "Sandbox"),
-        Category(id: 9, name: "Souls-Like"),
-        Category(id: 10, name: "J-RPG"),
-    ]
+    private var categories: [Category] = []
+    var onDataUpdated: (() -> Void)?
+    var onError: ((String) -> Void)?
+    
+    func fetchCategories() {
+        NetworkManager.shared.fetchGenres { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let categories):
+                    self?.categories = categories
+                    self?.onDataUpdated?()
+                case .failure(let error):
+                    self?.onError?(error.localizedDescription)
+                }
+            }
+        }
+    }
     
     func numberOfItems() -> Int {
         return categories.count

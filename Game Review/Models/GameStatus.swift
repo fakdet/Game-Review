@@ -5,7 +5,7 @@
 //  Created by M.  Azizcan Erdoğan on 17.04.2026.
 //
 
-enum GameStatus: Codable {
+enum GameStatus: String, Codable {
     case unplayed
     case playing
     case finished

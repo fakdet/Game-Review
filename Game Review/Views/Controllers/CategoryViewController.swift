@@ -28,6 +28,9 @@ class CategoryViewController: UIViewController{
         view.backgroundColor = .systemBackground
         setupUI()
         setupCollectionViewLayout()
+        
+        bindViewModel()
+        viewModel.fetchCategories()
     }
     
     private func setupCollectionViewLayout() {
@@ -71,6 +74,16 @@ class CategoryViewController: UIViewController{
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+    }
+    
+    private func bindViewModel() {
+        viewModel.onDataUpdated  = { [weak self] in
+            self?.collectionView.reloadData()
+        }
+        
+        viewModel.onError = { error in
+            print("Error!: \(error)")
+        }
     }
 }
 
