@@ -22,8 +22,18 @@ class GameListViewModel{
             DispatchQueue.main.async {
                 switch result {
                 case .success(let games):
-                    self?.allGames = games
-                    self?.filteredGames = games
+                    self?.allGames = games.map { apiGame in
+                        var game = apiGame
+                        if let local = RealmManager.shared.getLocalData(for: game.id) {
+                            game.status = GameStatus(rawValue: local.status) ?? .unplayed
+                            if let lr = local.review {
+                                game.review = Review(graphics: lr.graphics, soundDesign: lr.soundDesign, artDesign: lr.artDesign, gameplay: lr.gameplay, story: lr.story, overallRating: lr.overallRating, text: lr.text)
+                                game.rating = lr.overallRating
+                            }
+                        }
+                        return game
+                    }
+                    self?.filteredGames = self?.allGames ?? []
                     self?.onDataUpdated?()
                     
                 case .failure(let error):
@@ -87,8 +97,9 @@ class GameListViewModel{
             releaseDate: updatedGame.releaseDate,
             review: updatedGame.review
         )
-        
         allGames[index] = updatedGame
+        
+        RealmManager.shared.saveGameData(id: updatedGame.id, status: newStatus, review: updatedGame.review)
         filterGames(by: currentCategory ?? Category(id: -1, name: ""))
     }
     

@@ -44,7 +44,7 @@ class GameDetailViewModel {
     
     func saveReview(graphics: Double, soundDesign: Double, artDesign: Double,
                     gameplay: Double, story: Double, overall: Double, text: String) {
-        game.review = Review(
+        let newReview = Review(
             graphics: graphics,
             soundDesign: soundDesign,
             artDesign: artDesign,
@@ -53,8 +53,11 @@ class GameDetailViewModel {
             overallRating: overall,
             text: text
         )
+        game.review = newReview
         game.status = .reviewed
         game.rating = overall
+        
+        RealmManager.shared.saveGameData(id: game.id, status: .reviewed, review: newReview)
     }
     
 }

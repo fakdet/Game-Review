@@ -6,6 +6,23 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9C8871D82F98D92D00B40FC1 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9C8871D72F98D92D00B40FC1 /* RealmSwift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9C6611942F98C8AB003D7B24 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		9C1093A42F9223A500531880 /* Game Review.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Game Review.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C8871D82F98D92D00B40FC1 /* RealmSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				9C1093A62F9223A500531880 /* Game Review */,
+				9C6611902F98C8AB003D7B24 /* Frameworks */,
 				9C1093A52F9223A500531880 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -58,6 +77,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		9C6611902F98C8AB003D7B24 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -68,6 +94,7 @@
 				9C1093A02F9223A500531880 /* Sources */,
 				9C1093A12F9223A500531880 /* Frameworks */,
 				9C1093A22F9223A500531880 /* Resources */,
+				9C6611942F98C8AB003D7B24 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -78,6 +105,7 @@
 			);
 			name = "Game Review";
 			packageProductDependencies = (
+				9C8871D72F98D92D00B40FC1 /* RealmSwift */,
 			);
 			productName = "Game Review";
 			productReference = 9C1093A42F9223A500531880 /* Game Review.app */;
@@ -107,6 +135,9 @@
 			);
 			mainGroup = 9C10939B2F9223A500531880;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9C8871D42F98D92D00B40FC1 /* XCRemoteSwiftPackageReference "realm-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9C1093A52F9223A500531880 /* Products */;
 			projectDirPath = "";
@@ -207,7 +238,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -270,7 +301,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -341,6 +372,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9C8871D42F98D92D00B40FC1 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				branch = community;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9C8871D72F98D92D00B40FC1 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9C8871D42F98D92D00B40FC1 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9C10939C2F9223A500531880 /* Project object */;
 }
