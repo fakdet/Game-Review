@@ -14,6 +14,7 @@ class GameListViewController: UIViewController {
     private let viewModel = GameListViewModel()
     var category: Category?
     
+    
     //MARK: UI elements
     
     //I want a search bar, filter and a sort button. and then a table view
@@ -81,6 +82,13 @@ class GameListViewController: UIViewController {
             viewModel.fetchGames(for: category)
         }
         setupUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let category = category {
+            viewModel.fetchGames(for: category)
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -252,7 +260,16 @@ extension GameListViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         let game = viewModel.game(at: indexPath.row)
         let detailVC = GameDetailViewController(game: game)
+        
+        detailVC.delegate = self
         navigationController?.pushViewController(detailVC, animated: true)
+    }
+}
+
+extension GameListViewController: GameDetailDelegate{
+    func didUpdateGame(_ game: Game) {
+        viewModel.updateGame(game)
+        updateTableView()
     }
 }
 

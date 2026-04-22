@@ -103,4 +103,12 @@ class GameListViewModel{
         filterGames(by: currentCategory ?? Category(id: -1, name: ""))
     }
     
+    func updateGame(_ updatedGame: Game) {
+        guard let index = allGames.firstIndex(where: { $0.id == updatedGame.id }) else { return }
+        allGames[index] = updatedGame
+        if let category = currentCategory {
+            filterGames(by: category)
+        }
+    }
+    
 }

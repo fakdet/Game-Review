@@ -13,6 +13,9 @@ class GameDetailViewController: UIViewController {
     private var viewModel: GameDetailViewModel
     private var isEditingReview: Bool = false
     
+    //MARK: - Delegate
+    weak var delegate: GameDetailDelegate?
+    
     
     //MARK: - UI Elements
     private let scrollView: UIScrollView = {
@@ -314,6 +317,8 @@ class GameDetailViewController: UIViewController {
         setEditingMode(false)
         editButton.isHidden = false
         statusLabel.text = "Status: \(viewModel.status)"
+        
+        delegate?.didUpdateGame(viewModel.game)
     }
     
     private func populateData(){
@@ -368,6 +373,7 @@ extension GameDetailViewController: UITextFieldDelegate {
         
         return true
     }
+    
 }
 
 extension GameDetailViewController: UITextViewDelegate {
@@ -384,4 +390,9 @@ extension GameDetailViewController: UITextViewDelegate {
             textView.textColor = .placeholderText
         }
     }
+}
+
+
+protocol GameDetailDelegate: AnyObject {
+    func didUpdateGame(_ game: Game)
 }
