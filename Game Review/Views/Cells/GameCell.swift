@@ -6,8 +6,19 @@
 //
 
 import UIKit
+import Kingfisher
 
 class GameCell: UITableViewCell{
+    //MARK: - UI Elements
+    private let gameImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .scaleAspectFill
+        iv.clipsToBounds = true
+        iv.layer.cornerRadius = 8
+        iv.backgroundColor = .systemGray5
+        return iv
+    }()
     private let titleLabel = UILabel()
     private let ratingLabel = UILabel()
     private let statusButton: UIButton = {
@@ -31,6 +42,7 @@ class GameCell: UITableViewCell{
     
     private func setupUI()
     {
+        contentView.addSubview(gameImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(ratingLabel)
         contentView.addSubview(statusButton)
@@ -38,31 +50,39 @@ class GameCell: UITableViewCell{
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         ratingLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        titleLabel.numberOfLines = 1
+        titleLabel.numberOfLines = 2
         ratingLabel.numberOfLines = 1
         
-        NSLayoutConstraint.activate([
-            //LEFT - Game Name
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            titleLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.4),
-            
-            //CENTER - Rating
-            ratingLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            ratingLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            ratingLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.25),
-            
-            //RIGHT
-            statusButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            statusButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            statusButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.25),
-        ])
-        
-        
-        titleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
+        titleLabel.font = .systemFont(ofSize: 15, weight: .semibold)
         ratingLabel.font = .systemFont(ofSize: 14, weight: .medium)
         
         ratingLabel.textAlignment = .center
+        
+        NSLayoutConstraint.activate([
+            //LEFT - image
+            gameImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            gameImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            gameImageView.widthAnchor.constraint(equalToConstant: 56),
+            gameImageView.heightAnchor.constraint(equalToConstant: 56),
+            gameImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            gameImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            
+            //Label next to image
+            titleLabel.leadingAnchor.constraint(equalTo: gameImageView.trailingAnchor, constant: 12),
+            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: ratingLabel.leadingAnchor, constant: -8),
+            
+            // CENTER - rating
+            ratingLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            ratingLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            ratingLabel.widthAnchor.constraint(equalToConstant: 50),
+            
+            //RIGHT - status
+            statusButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+            statusButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            statusButton.widthAnchor.constraint(equalToConstant: 80),
+        ])
+
     }
     
     
@@ -76,15 +96,17 @@ class GameCell: UITableViewCell{
             ratingLabel.text = "NR"
         }
         
+        if let urlString = game.imageURL, let url = URL(string: urlString) {
+            gameImageView.kf.setImage(with: url, placeholder: UIImage(systemName: "photo"))
+        } else {
+            gameImageView.image = UIImage(systemName: "photo")
+        }
+        
         switch game.status {
-        case .unplayed:
-            statusButton.setTitle("Unplayed", for: .normal)
-        case .playing:
-            statusButton.setTitle("Playing", for: .normal)
-        case .finished:
-            statusButton.setTitle("Finished", for: .normal)
-        case .reviewed:
-            statusButton.setTitle("Reviewed", for: .normal)
+        case .unplayed: statusButton.setTitle("Unplayed", for: .normal)
+        case .playing:  statusButton.setTitle("Playing", for: .normal)
+        case .finished: statusButton.setTitle("Finished", for: .normal)
+        case .reviewed: statusButton.setTitle("Reviewed", for: .normal)
         }
         
         //Dropdown menu build

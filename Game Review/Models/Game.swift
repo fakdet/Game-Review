@@ -14,4 +14,5 @@ struct Game: Codable{
     var publisher: String?
     var releaseDate: String?
     var review: Review?
+    var imageURL: String?
 }

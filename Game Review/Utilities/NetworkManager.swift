@@ -62,7 +62,8 @@ class NetworkManager {
                             status: .unplayed,
                             publisher: rawgGame.publishers?.first?.name,
                             releaseDate: rawgGame.released,
-                            review: nil
+                            review: nil,
+                            imageURL: rawgGame.backgroundImage
                         )
                     }
                     completion(.success(games))
