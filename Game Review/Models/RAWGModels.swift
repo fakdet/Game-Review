@@ -14,6 +14,14 @@ struct RAWGGenreResponse: Codable, Sendable {
 struct RAWGGenre: Codable, Sendable {
     let id: Int
     let name: String
+    let imageBackground: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case imageBackground = "image_background"
+    }
+
 }
 
 struct RAWGGameResponse: Codable, Sendable {

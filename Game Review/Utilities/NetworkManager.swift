@@ -29,7 +29,7 @@ class NetworkManager {
             do {
                 let decoded = try JSONDecoder().decode(RAWGGenreResponse.self, from: data)
                 let categories = decoded.results.map {
-                    Category(id: $0.id, name: $0.name)
+                    Category(id: $0.id, name: $0.name, imageURL: $0.imageBackground)
                 }
                 completion(.success(categories))
             } catch {

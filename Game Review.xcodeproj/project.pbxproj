@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9C8871D82F98D92D00B40FC1 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9C8871D72F98D92D00B40FC1 /* RealmSwift */; };
+		9C8871DB2F98F13100B40FC1 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 9C8871DA2F98F13100B40FC1 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,6 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C8871DB2F98F13100B40FC1 /* Kingfisher in Frameworks */,
 				9C8871D82F98D92D00B40FC1 /* RealmSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -106,6 +108,7 @@
 			name = "Game Review";
 			packageProductDependencies = (
 				9C8871D72F98D92D00B40FC1 /* RealmSwift */,
+				9C8871DA2F98F13100B40FC1 /* Kingfisher */,
 			);
 			productName = "Game Review";
 			productReference = 9C1093A42F9223A500531880 /* Game Review.app */;
@@ -137,6 +140,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				9C8871D42F98D92D00B40FC1 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				9C8871D92F98F13100B40FC1 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9C1093A52F9223A500531880 /* Products */;
@@ -382,6 +386,14 @@
 				kind = branch;
 			};
 		};
+		9C8871D92F98F13100B40FC1 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.8.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -389,6 +401,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9C8871D42F98D92D00B40FC1 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
+		};
+		9C8871DA2F98F13100B40FC1 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9C8871D92F98F13100B40FC1 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

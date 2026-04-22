@@ -100,7 +100,9 @@ class GameListViewModel{
         allGames[index] = updatedGame
         
         RealmManager.shared.saveGameData(id: updatedGame.id, status: newStatus, review: updatedGame.review)
-        filterGames(by: currentCategory ?? Category(id: -1, name: ""))
+        if let category = currentCategory {
+            filterGames(by: category)
+        }
     }
     
     func updateGame(_ updatedGame: Game) {

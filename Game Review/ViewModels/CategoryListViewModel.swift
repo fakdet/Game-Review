@@ -38,4 +38,8 @@ class CategoryListViewModel{
     func title(for index: Int) -> String {
         return categories[index].name
     }
+    
+    func imageURL(for index: Int) -> String? {
+        return categories[index].imageURL
+    }
 }

@@ -94,8 +94,9 @@ extension CategoryViewController: UICollectionViewDelegate, UICollectionViewData
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell
+        let category = viewModel.category(at: indexPath.row)
         
-        cell.configure(with: viewModel.title(for: indexPath.row))
+        cell.configure(with: category.name, imageURL: category.imageURL)
         return cell
     }
     
