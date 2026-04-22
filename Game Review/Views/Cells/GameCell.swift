@@ -73,7 +73,8 @@ class GameCell: UITableViewCell{
             titleLabel.trailingAnchor.constraint(equalTo: ratingLabel.leadingAnchor, constant: -8),
             
             // CENTER - rating
-            ratingLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            ratingLabel.trailingAnchor.constraint(equalTo: statusButton.leadingAnchor, constant: -8),
             ratingLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             ratingLabel.widthAnchor.constraint(equalToConstant: 50),
             
