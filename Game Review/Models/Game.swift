@@ -5,7 +5,7 @@
 //  Created by M.  Azizcan Erdoğan on 17.04.2026.
 //
 
-struct Game{
+struct Game: Codable{
     let id: Int
     var title: String
     var categoryIDs: [Int] //category link - Many - Many relation

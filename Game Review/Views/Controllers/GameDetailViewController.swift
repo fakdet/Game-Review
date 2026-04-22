@@ -18,8 +18,6 @@ class GameDetailViewController: UIViewController {
     private let scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.translatesAutoresizingMaskIntoConstraints = false
-        sv.delaysContentTouches = false
-        sv.canCancelContentTouches = true
         return sv
     }()
     
@@ -94,40 +92,13 @@ class GameDetailViewController: UIViewController {
         return button
     }()
     
-    // MARK: - Sliders
-    private let graphicsSlider = GameDetailViewController.makeSlider()
-    private let soundSlider = GameDetailViewController.makeSlider()
-    private let artSlider = GameDetailViewController.makeSlider()
-    private let gameplaySlider = GameDetailViewController.makeSlider()
-    private let storySlider = GameDetailViewController.makeSlider()
-    private let overallSlider = GameDetailViewController.makeSlider()
-    
-    ///To create sliders fastly and to decrease the amount of code
-    private static func makeSlider() -> UISlider {
-        let slider = UISlider()
-        slider.translatesAutoresizingMaskIntoConstraints = false
-        slider.minimumValue = 0
-        slider.maximumValue = 10
-        return slider
-    }
-    
-    // MARK: Slider Value Labels
-    private let graphicsValueLabel = GameDetailViewController.makeValueLabel()
-    private let soundValueLabel = GameDetailViewController.makeValueLabel()
-    private let artValueLabel = GameDetailViewController.makeValueLabel()
-    private let gameplayValueLabel = GameDetailViewController.makeValueLabel()
-    private let storyValueLabel = GameDetailViewController.makeValueLabel()
-    private let overallValueLabel = GameDetailViewController.makeValueLabel()
-
-    private static func makeValueLabel() -> UILabel {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 14, weight: .medium)
-        label.textAlignment = .right
-        label.text = "0.0"
-        label.widthAnchor.constraint(equalToConstant: 36).isActive = true
-        return label
-    }
+    // MARK: - Fields
+    private let graphicsField = GameDetailViewController.makeRatingField()
+    private let soundField = GameDetailViewController.makeRatingField()
+    private let artField = GameDetailViewController.makeRatingField()
+    private let gameplayField = GameDetailViewController.makeRatingField()
+    private let storyField = GameDetailViewController.makeRatingField()
+    private let overallField = GameDetailViewController.makeRatingField()
     
     //MARK: - Review Text
     private let reviewTextView: UITextView = {
@@ -166,9 +137,11 @@ class GameDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        reviewTextView.delegate = self
+        
         view.backgroundColor = .systemBackground
         title = viewModel.title
-                
+
         setupUI()
         populateData()
         setupActions()
@@ -199,7 +172,6 @@ class GameDetailViewController: UIViewController {
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
             gameTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
@@ -231,22 +203,22 @@ class GameDetailViewController: UIViewController {
             reviewTitleLabel.leadingAnchor.constraint(equalTo: reviewCard.leadingAnchor, constant: 16),
             
             editButton.centerYAnchor.constraint(equalTo: reviewTitleLabel.centerYAnchor),
-            editButton.trailingAnchor.constraint(equalTo: reviewCard.trailingAnchor, constant: -16)
+            editButton.trailingAnchor.constraint(equalTo: reviewCard.trailingAnchor, constant: -16),
         ])
         
         //Special to sliders
         var lastAnchor = reviewTitleLabel.bottomAnchor
         
-        lastAnchor = addSliderRow(name: "Graphics", slider: graphicsSlider, valueLabel: graphicsValueLabel, topAnchor: lastAnchor)
-        lastAnchor = addSliderRow(name: "Sound Design", slider: soundSlider, valueLabel: soundValueLabel, topAnchor: lastAnchor)
-        lastAnchor = addSliderRow(name: "Art Design", slider: artSlider, valueLabel: artValueLabel, topAnchor: lastAnchor)
-        lastAnchor = addSliderRow(name: "Gameplay", slider: gameplaySlider, valueLabel: gameplayValueLabel, topAnchor: lastAnchor)
-        lastAnchor = addSliderRow(name: "Story", slider: storySlider, valueLabel: storyValueLabel, topAnchor: lastAnchor)
-        lastAnchor = addSliderRow(name: "Overall", slider: overallSlider, valueLabel: overallValueLabel, topAnchor: lastAnchor)
+        lastAnchor = addRatingRow(name: "Graphics",     field: graphicsField,  topAnchor: lastAnchor)
+        lastAnchor = addRatingRow(name: "Sound Design", field: soundField,     topAnchor: lastAnchor)
+        lastAnchor = addRatingRow(name: "Art Design",   field: artField,       topAnchor: lastAnchor)
+        lastAnchor = addRatingRow(name: "Gameplay",     field: gameplayField,  topAnchor: lastAnchor)
+        lastAnchor = addRatingRow(name: "Story",        field: storyField,     topAnchor: lastAnchor)
+        lastAnchor = addRatingRow(name: "Overall",      field: overallField,   topAnchor: lastAnchor)
+
         
         NSLayoutConstraint.activate([
             reviewTextView.topAnchor.constraint(equalTo: lastAnchor, constant: 16),
-
             reviewTextView.leadingAnchor.constraint(equalTo: reviewCard.leadingAnchor, constant: 16),
             reviewTextView.trailingAnchor.constraint(equalTo: reviewCard.trailingAnchor, constant: -16),
             reviewTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 100),
@@ -256,17 +228,19 @@ class GameDetailViewController: UIViewController {
             saveButton.trailingAnchor.constraint(equalTo: reviewCard.trailingAnchor, constant: -16),
             saveButton.heightAnchor.constraint(equalToConstant: 44),
             saveButton.bottomAnchor.constraint(equalTo: reviewCard.bottomAnchor, constant: -16),
+
+            reviewCard.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
         ])
     }
     
-    private func addSliderRow(name: String, slider: UISlider, valueLabel: UILabel, topAnchor: NSLayoutYAxisAnchor) -> NSLayoutYAxisAnchor {
+    private func addRatingRow(name: String, field: UITextField, topAnchor: NSLayoutYAxisAnchor) -> NSLayoutYAxisAnchor {
         let titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = name
         titleLabel.font = .systemFont(ofSize: 15, weight: .medium)
         titleLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
-
-        let row = UIStackView(arrangedSubviews: [titleLabel, slider, valueLabel])
+        
+        let row = UIStackView(arrangedSubviews: [titleLabel, field])
         row.translatesAutoresizingMaskIntoConstraints = false
         row.axis = .horizontal
         row.spacing = 8
@@ -284,43 +258,36 @@ class GameDetailViewController: UIViewController {
     }
     
     private func setupActions() {
-        graphicsSlider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
-        soundSlider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
-        artSlider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
-        gameplaySlider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
-        storySlider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
-        overallSlider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
+        let fields = [graphicsField, soundField, artField, gameplayField, storyField, overallField]
+        fields.forEach { $0.delegate = self }
         
         editButton.addTarget(self, action: #selector(editTapped), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
     }
-    
-    @objc private func sliderChanged(_ sender: UISlider){
-        sender.value = round(sender.value * 10) / 10 //For snapping it to 1 decimal
-        updateValueLabels()
-    }
-    
-    private func updateValueLabels(){
-        graphicsValueLabel.text = String(format: "%.1f", graphicsSlider.value)
-        soundValueLabel.text = String(format: "%.1f", soundSlider.value)
-        artValueLabel.text = String(format: "%.1f", artSlider.value)
-        gameplayValueLabel.text = String(format: "%.1f", gameplaySlider.value)
-        storyValueLabel.text = String(format: "%.1f", storySlider.value)
-        overallValueLabel.text = String(format: "%.1f", overallSlider.value)
-    }
-    
+
     private func setEditingMode(_ editing: Bool) {
         isEditingReview = editing
         
-        let sliders = [graphicsSlider, soundSlider, artSlider, gameplaySlider, storySlider, overallSlider]
-        sliders.forEach { $0.isUserInteractionEnabled = editing }
-        sliders.forEach { $0.alpha = editing ? 1.0 : 0.5}
+        let fields = [graphicsField, soundField, artField, gameplayField, storyField, overallField]
+        fields.forEach { $0.isUserInteractionEnabled = editing }
+        fields.forEach { $0.alpha = editing ? 1.0 : 0.5 }
         
         reviewTextView.isEditable = editing
         reviewTextView.alpha = editing ? 1.0 : 0.8
         
         saveButton.isHidden = !editing
         editButton.setTitle(editing ? "Cancel" : "Edit", for: .normal)
+    }
+    
+    private static func makeRatingField() -> UITextField {
+        let tf = UITextField()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.borderStyle = .roundedRect
+        tf.keyboardType = .decimalPad
+        tf.textAlignment = .center
+        tf.placeholder = "0.0"
+        tf.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        return tf
     }
     
     @objc private func editTapped() {
@@ -335,13 +302,13 @@ class GameDetailViewController: UIViewController {
     
     @objc private func saveTapped() {
         viewModel.saveReview(
-            graphics:    Double(graphicsSlider.value),
-            soundDesign: Double(soundSlider.value),
-            artDesign:   Double(artSlider.value),
-            gameplay:    Double(gameplaySlider.value),
-            story:       Double(storySlider.value),
-            overall:     Double(overallSlider.value),
-            text: reviewTextView.text ?? ""
+            graphics:    Double(graphicsField.text ?? "0") ?? 0,
+            soundDesign: Double(soundField.text ?? "0") ?? 0,
+            artDesign:   Double(artField.text ?? "0") ?? 0,
+            gameplay:    Double(gameplayField.text ?? "0") ?? 0,
+            story:       Double(storyField.text ?? "0") ?? 0,
+            overall:     Double(overallField.text ?? "0") ?? 0,
+            text:        reviewTextView.text ?? ""
         )
         
         setEditingMode(false)
@@ -356,22 +323,65 @@ class GameDetailViewController: UIViewController {
         statusLabel.text = "Status: \(viewModel.status)"
         
         if viewModel.hasReview {
-            graphicsSlider.value = Float(viewModel.graphics)
-            soundSlider.value = Float(viewModel.soundDesign)
-            artSlider.value = Float(viewModel.artDesign)
-            gameplaySlider.value = Float(viewModel.gameplay)
-            storySlider.value = Float(viewModel.story)
-            overallSlider.value = Float(viewModel.overallRating)
+            graphicsField.text = String(format: "%.1f", viewModel.graphics)
+            soundField.text    = String(format: "%.1f", viewModel.soundDesign)
+            artField.text      = String(format: "%.1f", viewModel.artDesign)
+            gameplayField.text = String(format: "%.1f", viewModel.gameplay)
+            storyField.text    = String(format: "%.1f", viewModel.story)
+            overallField.text  = String(format: "%.1f", viewModel.overallRating)
             
             reviewTextView.text = viewModel.reviewText
             reviewTextView.textColor = .label
-            updateValueLabels()
             
             setEditingMode(false)
             editButton.isHidden = false
         } else {
             setEditingMode(true)
             editButton.isHidden = true
+        }
+    }
+    
+}
+
+
+extension GameDetailViewController: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        let fields = [graphicsField, soundField, artField, gameplayField, storyField, overallField]
+        guard fields.contains(textField) else { return }
+        
+        var value = Double(textField.text ?? "0") ?? 0
+        value = min(max(value, 0), 10)
+        value = (value * 10).rounded() / 10 // 1 decimal
+        textField.text = String(format: "%.1f", value)
+    }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let fields = [graphicsField, soundField, artField, gameplayField, storyField, overallField]
+        guard fields.contains(textField) else { return true }
+        
+        if string.isEmpty { return true }
+        
+        let allowedCharacters = CharacterSet(charactersIn: "0123456789.")
+        guard string.rangeOfCharacter(from: allowedCharacters.inverted) == nil else { return false }
+        
+        let currentText = textField.text ?? ""
+        if string == "." && currentText.contains(".") { return false }
+        
+        return true
+    }
+}
+
+extension GameDetailViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == .placeholderText {
+            textView.text = ""
+            textView.textColor = .label
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Write Your Review Here.."
+            textView.textColor = .placeholderText
         }
     }
 }

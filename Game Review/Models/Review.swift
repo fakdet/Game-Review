@@ -5,7 +5,7 @@
 //  Created by M.  Azizcan Erdoğan on 21.04.2026.
 //
 
-struct Review {
+struct Review: Codable {
     var graphics: Double
     var soundDesign: Double
     var artDesign: Double
