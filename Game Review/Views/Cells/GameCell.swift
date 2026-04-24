@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+import SnapKit
 
 class GameCell: UITableViewCell{
     //MARK: - UI Elements
@@ -58,31 +59,57 @@ class GameCell: UITableViewCell{
         
         ratingLabel.textAlignment = .center
         
-        NSLayoutConstraint.activate([
-            //LEFT - image
-            gameImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
-            gameImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            gameImageView.widthAnchor.constraint(equalToConstant: 56),
-            gameImageView.heightAnchor.constraint(equalToConstant: 56),
-            gameImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            gameImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+        gameImageView.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(12)
+            make.centerY.equalToSuperview()
+            make.width.height.equalTo(56)
             
-            //Label next to image
-            titleLabel.leadingAnchor.constraint(equalTo: gameImageView.trailingAnchor, constant: 12),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: ratingLabel.leadingAnchor, constant: -8),
-            
-            // CENTER - rating
-            
-            ratingLabel.trailingAnchor.constraint(equalTo: statusButton.leadingAnchor, constant: -8),
-            ratingLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            ratingLabel.widthAnchor.constraint(equalToConstant: 50),
-            
-            //RIGHT - status
-            statusButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
-            statusButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            statusButton.widthAnchor.constraint(equalToConstant: 80),
-        ])
+            make.top.equalToSuperview().inset(8)
+            make.bottom.equalToSuperview().inset(8)
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.leading.equalTo(gameImageView.snp.trailing).offset(12)
+            make.centerY.equalToSuperview()
+            make.trailing.equalTo(ratingLabel.snp.leading).offset(-8)
+        }
+        
+        ratingLabel.snp.makeConstraints { make in
+            make.trailing.equalTo(statusButton.snp.leading).offset(-8)
+            make.centerY.equalToSuperview()
+            make.width.equalTo(50)
+        }
+        
+        statusButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(12)
+            make.centerY.equalToSuperview()
+            make.width.equalTo(80)
+        }
+//        NSLayoutConstraint.activate([
+//            //LEFT - image
+//            gameImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+//            gameImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+//            gameImageView.widthAnchor.constraint(equalToConstant: 56),
+//            gameImageView.heightAnchor.constraint(equalToConstant: 56),
+//            gameImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+//            gameImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+//            
+//            //Label next to image
+//            titleLabel.leadingAnchor.constraint(equalTo: gameImageView.trailingAnchor, constant: 12),
+//            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+//            titleLabel.trailingAnchor.constraint(equalTo: ratingLabel.leadingAnchor, constant: -8),
+//            
+//            // CENTER - rating
+//            
+//            ratingLabel.trailingAnchor.constraint(equalTo: statusButton.leadingAnchor, constant: -8),
+//            ratingLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+//            ratingLabel.widthAnchor.constraint(equalToConstant: 50),
+//            
+//            //RIGHT - status
+//            statusButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+//            statusButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+//            statusButton.widthAnchor.constraint(equalToConstant: 80),
+//        ])
 
     }
     
