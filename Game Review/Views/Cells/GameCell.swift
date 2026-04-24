@@ -90,7 +90,7 @@ class GameCell: UITableViewCell{
     override func prepareForReuse() {
         super.prepareForReuse()
         gameImageView.kf.cancelDownloadTask()
-        gameImageView.image = nil
+        statusButton.menu = nil
     }
     
     func configure(with game: Game, onStatusChange: @escaping (GameStatus) -> Void){
@@ -103,21 +103,14 @@ class GameCell: UITableViewCell{
         }
         
         if let urlString = game.imageURL, let url = URL(string: urlString) {
-            let processor = DownsamplingImageProcessor(size: gameImageView.bounds.size)
-
             gameImageView.kf.setImage(
                 with: url,
                 placeholder: UIImage(systemName: "photo"),
-                options: [
-                    .processor(processor),
-                    .scaleFactor(gameImageView.traitCollection.displayScale),
-                    .cacheOriginalImage
-                ]
+                options: [.cacheOriginalImage]
             )
         } else {
             gameImageView.image = UIImage(systemName: "photo")
         }
-        
         switch game.status {
         case .unplayed: statusButton.setTitle("Unplayed", for: .normal)
         case .playing:  statusButton.setTitle("Playing", for: .normal)
@@ -137,5 +130,14 @@ class GameCell: UITableViewCell{
                 onStatusChange(.finished)
             },
         ])
+    }
+    
+    func updateStatusOnly(to status: GameStatus) {
+        switch status {
+        case .unplayed: statusButton.setTitle("Unplayed", for: .normal)
+        case .playing:  statusButton.setTitle("Playing", for: .normal)
+        case .finished: statusButton.setTitle("Finished", for: .normal)
+        case .reviewed: statusButton.setTitle("Reviewed", for: .normal)
+        }
     }
 }

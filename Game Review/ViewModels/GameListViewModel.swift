@@ -95,11 +95,16 @@ class GameListViewModel{
             status: newStatus,
             publisher: updatedGame.publisher,
             releaseDate: updatedGame.releaseDate,
-            review: updatedGame.review
+            review: updatedGame.review,
+            imageURL: updatedGame.imageURL
         )
         allGames[index] = updatedGame
         
         RealmManager.shared.saveGameData(id: updatedGame.id, status: newStatus, review: updatedGame.review)
+        
+        if let category = currentCategory {
+            filterGames(by: category)
+        }
         
     }
     

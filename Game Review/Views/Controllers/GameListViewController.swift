@@ -240,10 +240,15 @@ extension GameListViewController: UITableViewDelegate, UITableViewDataSource {
         let game = viewModel.game(at: indexPath.row)
         
         cell.configure(with: game) { [weak self] newStatus in
-            self?.viewModel.changeStatus(of: game, to: newStatus)
-            self?.updateTableView()
-            self?.updateFooter()
-            self?.updateEmptyState()
+            guard let self = self else { return }
+            self.viewModel.changeStatus(of: game, to: newStatus)
+            
+            if let existingCell = self.tableView.cellForRow(at: indexPath) as? GameCell {
+                existingCell.updateStatusOnly(to: newStatus)
+            }
+            
+            self.updateFooter()
+            self.updateEmptyState()
         }
         
         return cell
