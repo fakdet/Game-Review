@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		9C8871D82F98D92D00B40FC1 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9C8871D72F98D92D00B40FC1 /* RealmSwift */; };
 		9C8871DB2F98F13100B40FC1 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 9C8871DA2F98F13100B40FC1 /* Kingfisher */; };
+		9C8872E92F9B651800B40FC1 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 9C8872E82F9B651800B40FC1 /* SnapKit-Dynamic */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,6 +57,7 @@
 			files = (
 				9C8871DB2F98F13100B40FC1 /* Kingfisher in Frameworks */,
 				9C8871D82F98D92D00B40FC1 /* RealmSwift in Frameworks */,
+				9C8872E92F9B651800B40FC1 /* SnapKit-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,6 +111,7 @@
 			packageProductDependencies = (
 				9C8871D72F98D92D00B40FC1 /* RealmSwift */,
 				9C8871DA2F98F13100B40FC1 /* Kingfisher */,
+				9C8872E82F9B651800B40FC1 /* SnapKit-Dynamic */,
 			);
 			productName = "Game Review";
 			productReference = 9C1093A42F9223A500531880 /* Game Review.app */;
@@ -141,6 +144,7 @@
 			packageReferences = (
 				9C8871D42F98D92D00B40FC1 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				9C8871D92F98F13100B40FC1 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				9C8872E52F9B651800B40FC1 /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9C1093A52F9223A500531880 /* Products */;
@@ -394,6 +398,14 @@
 				minimumVersion = 8.8.1;
 			};
 		};
+		9C8872E52F9B651800B40FC1 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -406,6 +418,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9C8871D92F98F13100B40FC1 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		9C8872E82F9B651800B40FC1 /* SnapKit-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9C8872E52F9B651800B40FC1 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = "SnapKit-Dynamic";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
