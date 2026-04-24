@@ -236,11 +236,14 @@ class GameDetailViewController: UIViewController {
         reviewCard.snp.makeConstraints { make in
             make.top.equalTo(infoCard.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview().inset(16)
+            
+            make.bottom.equalToSuperview().inset(24)
         }
         
         reviewTitleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(16)
             make.leading.equalToSuperview().inset(16)
+            make.trailing.equalToSuperview().inset(16)
         }
         
         editButton.snp.makeConstraints { make in
@@ -311,7 +314,7 @@ class GameDetailViewController: UIViewController {
         
         
         reviewTextView.snp.makeConstraints { make in
-            make.top.equalTo(lastView).offset(16)
+            make.top.equalTo(lastView.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(16)
             make.height.greaterThanOrEqualTo(100)
         }
@@ -320,10 +323,6 @@ class GameDetailViewController: UIViewController {
             make.top.equalTo(reviewTextView.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(16)
             make.height.equalTo(44)
-            make.bottom.equalToSuperview().inset(24)
-        }
-        
-        reviewCard.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(24)
         }
         
