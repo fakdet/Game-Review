@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SnapKit
 
 class GameListViewController: UIViewController {
     
@@ -114,35 +115,39 @@ class GameListViewController: UIViewController {
         tableView.clipsToBounds = true
         tableView.separatorStyle = .none
         
+        searchBar.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.leading.trailing.equalToSuperview()
+        }
         
-        NSLayoutConstraint.activate([
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            filterButton.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 8),
-            filterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            
-            tableView.topAnchor.constraint(equalTo: filterButton.bottomAnchor, constant: 8),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableView.bottomAnchor.constraint(equalTo: footerView.topAnchor, constant: -8),
-            
-            footerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            footerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            footerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
-            footerView.heightAnchor.constraint(equalToConstant: 56),
-            
-            footerLabel.topAnchor.constraint(equalTo: footerView.topAnchor, constant: 8),
-            footerLabel.centerXAnchor.constraint(equalTo: footerView.centerXAnchor),
-            
-            progressBar.topAnchor.constraint(equalTo: footerLabel.bottomAnchor, constant: 6),
-            progressBar.leadingAnchor.constraint(equalTo: footerView.leadingAnchor, constant: 12),
-            progressBar.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -12),
-            progressBar.heightAnchor.constraint(equalToConstant: 8),
-            progressBar.bottomAnchor.constraint(equalTo: footerView.bottomAnchor, constant: -8),
-            
-        ])
+        filterButton.snp.makeConstraints { make in
+            make.top.equalTo(searchBar.snp.bottom).offset(8)
+            make.trailing.equalToSuperview().inset(16)
+        }
+        
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(filterButton.snp.bottom).offset(8)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.bottom.equalTo(footerView.snp.top).offset(-8)
+        }
+        
+        footerView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.bottom.equalToSuperview().offset(-8)
+            make.height.equalTo(56)
+        }
+        
+        footerLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(8)
+            make.centerX.equalToSuperview()
+        }
+        
+        progressBar.snp.makeConstraints { make in
+            make.top.equalTo(footerLabel.snp.bottom).offset(6)
+            make.leading.trailing.equalToSuperview().inset(12)
+            make.height.equalTo(8)
+            make.bottom.equalToSuperview().offset(-8)
+        }
     }
     @objc private func filterButtonTapped(){
         let actionSheet = UIAlertController(title: "Filter By Status", message: nil, preferredStyle: .actionSheet)
