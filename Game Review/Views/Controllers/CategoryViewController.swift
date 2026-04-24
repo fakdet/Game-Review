@@ -6,6 +6,7 @@
 //
 import Foundation
 import UIKit
+import SnapKit
 
 class CategoryViewController: UIViewController{
     
@@ -64,16 +65,27 @@ class CategoryViewController: UIViewController{
         view.addSubview(titleLabel)
         view.addSubview(collectionView)
         
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:16),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
+            make.leading.trailing.equalToSuperview()
+        }
+        
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(16)
+            make.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+        }
+//        
+//        NSLayoutConstraint.activate([
+//            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:16),
+//            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+//            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+//            
+//            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
+//            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+//            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+//            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+//        ])
     }
     
     private func bindViewModel() {
