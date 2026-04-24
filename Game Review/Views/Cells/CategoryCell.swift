@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+import SnapKit
 
 class CategoryCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
@@ -56,22 +57,39 @@ class CategoryCell: UICollectionViewCell {
         contentView.addSubview(overlayView)
         contentView.addSubview(titleLabel)
         
-        NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
-            overlayView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            overlayView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            overlayView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            overlayView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
-            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-        ])
+        imageView.snp.makeConstraints {make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
+        overlayView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(8)
+        }
+//        NSLayoutConstraint.activate([
+//            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+//            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+//            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+//            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+//            
+//            overlayView.topAnchor.constraint(equalTo: contentView.topAnchor),
+//            overlayView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+//            overlayView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+//            overlayView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+//            
+//            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+//            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+//            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+//            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+//        ])
     }
     func configure(with title: String, imageURL: String?) {
         titleLabel.text = title
