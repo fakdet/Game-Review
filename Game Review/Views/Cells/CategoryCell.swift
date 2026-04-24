@@ -79,4 +79,10 @@ class CategoryCell: UICollectionViewCell {
             imageView.kf.setImage(with: url, placeholder: UIImage(systemName: "photo"))
         }
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.kf.cancelDownloadTask()
+        imageView.image = nil
+    }
 }

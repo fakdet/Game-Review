@@ -87,6 +87,11 @@ class GameCell: UITableViewCell{
     }
     
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        gameImageView.kf.cancelDownloadTask()
+        gameImageView.image = nil
+    }
     
     func configure(with game: Game, onStatusChange: @escaping (GameStatus) -> Void){
         titleLabel.text = game.title
@@ -98,7 +103,17 @@ class GameCell: UITableViewCell{
         }
         
         if let urlString = game.imageURL, let url = URL(string: urlString) {
-            gameImageView.kf.setImage(with: url, placeholder: UIImage(systemName: "photo"))
+            let processor = DownsamplingImageProcessor(size: gameImageView.bounds.size)
+
+            gameImageView.kf.setImage(
+                with: url,
+                placeholder: UIImage(systemName: "photo"),
+                options: [
+                    .processor(processor),
+                    .scaleFactor(gameImageView.traitCollection.displayScale),
+                    .cacheOriginalImage
+                ]
+            )
         } else {
             gameImageView.image = UIImage(systemName: "photo")
         }

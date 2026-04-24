@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,8 +15,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+//        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!)
         
-        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!)
+        let cache = ImageCache.default
+        
+        cache.memoryStorage.config.totalCostLimit = 1024 * 1024 * 10 // 10 MB
+        cache.diskStorage.config.sizeLimit = 1024 * 1024 * 100 // 100 MB
+        cache.diskStorage.config.expiration = .days(7)
+        
         return true
     }
 
