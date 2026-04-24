@@ -13,7 +13,7 @@ class CategoryCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         
-        label.translatesAutoresizingMaskIntoConstraints = false //Needed ig, idk why
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textColor = .white
@@ -42,11 +42,11 @@ class CategoryCell: UICollectionViewCell {
         super.init(frame: frame)
         setupUI()
     }
-    //MARK: - This is not used, but required to be implemented.
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - UI Setup
     private func setupUI()
     {
         contentView.backgroundColor = .systemIndigo
@@ -74,23 +74,8 @@ class CategoryCell: UICollectionViewCell {
             make.centerY.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(8)
         }
-//        NSLayoutConstraint.activate([
-//            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-//            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-//            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-//            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-//            
-//            overlayView.topAnchor.constraint(equalTo: contentView.topAnchor),
-//            overlayView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-//            overlayView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-//            overlayView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-//            
-//            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-//            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-//            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-//            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-//        ])
     }
+    
     func configure(with title: String, imageURL: String?) {
         titleLabel.text = title
         if let urlString = imageURL, let url = URL(string: urlString) {

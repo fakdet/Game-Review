@@ -75,17 +75,6 @@ class CategoryViewController: UIViewController{
             make.bottom.equalToSuperview()
             make.leading.trailing.equalToSuperview()
         }
-//        
-//        NSLayoutConstraint.activate([
-//            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:16),
-//            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            
-//            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
-//            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-//        ])
     }
     
     private func bindViewModel() {

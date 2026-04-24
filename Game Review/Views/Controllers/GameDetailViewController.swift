@@ -194,9 +194,9 @@ class GameDetailViewController: UIViewController {
         }
         
         contentView.snp.makeConstraints { make in
-            //            make.top.equalToSuperview()
-            //            make.leading.trailing.equalToSuperview()
-            //            make.bottom.equalToSuperview()
+//          make.top.equalToSuperview()
+//          make.leading.trailing.equalToSuperview()
+//          make.bottom.equalToSuperview()
             make.edges.equalTo(scrollView.contentLayoutGuide)
             make.width.equalTo(scrollView.frameLayoutGuide)
         }
@@ -251,58 +251,7 @@ class GameDetailViewController: UIViewController {
             make.trailing.equalToSuperview().inset(16)
         }
         
-        //
-        //        NSLayoutConstraint.activate([
-        //            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-        //            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-        //            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        //            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        //
-        //            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-        //            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-        //            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-        //            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-        //
-        //            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
-        //
-        //            gameImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-        //            gameImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-        //            gameImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-        //            gameImageView.heightAnchor.constraint(equalToConstant: 200),
-        //
-        //            gameTitleLabel.topAnchor.constraint(equalTo: gameImageView.bottomAnchor, constant: 16),
-        //            gameTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-        //            gameTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-        //
-        //            infoCard.topAnchor.constraint(equalTo: gameTitleLabel.bottomAnchor, constant: 20),
-        //            infoCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-        //            infoCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-        //
-        //            publisherLabel.topAnchor.constraint(equalTo: infoCard.topAnchor, constant: 16),
-        //            publisherLabel.leadingAnchor.constraint(equalTo: infoCard.leadingAnchor, constant: 16),
-        //            publisherLabel.trailingAnchor.constraint(equalTo: infoCard.trailingAnchor, constant: -16),
-        //
-        //            releaseDateLabel.topAnchor.constraint(equalTo: publisherLabel.bottomAnchor, constant: 8),
-        //            releaseDateLabel.leadingAnchor.constraint(equalTo: infoCard.leadingAnchor, constant: 16),
-        //            releaseDateLabel.trailingAnchor.constraint(equalTo: infoCard.trailingAnchor, constant: -16),
-        //
-        //            statusLabel.topAnchor.constraint(equalTo: releaseDateLabel.bottomAnchor, constant: 8),
-        //            statusLabel.leadingAnchor.constraint(equalTo: infoCard.leadingAnchor, constant: 16),
-        //            statusLabel.trailingAnchor.constraint(equalTo: infoCard.trailingAnchor, constant: -16),
-        //            statusLabel.bottomAnchor.constraint(equalTo: infoCard.bottomAnchor, constant: -16),
-        //
-        //            reviewCard.topAnchor.constraint(equalTo: infoCard.bottomAnchor, constant: 20),
-        //            reviewCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-        //            reviewCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-        //
-        //            reviewTitleLabel.topAnchor.constraint(equalTo: reviewCard.topAnchor, constant: 16),
-        //            reviewTitleLabel.leadingAnchor.constraint(equalTo: reviewCard.leadingAnchor, constant: 16),
-        //
-        //            editButton.centerYAnchor.constraint(equalTo: reviewTitleLabel.centerYAnchor),
-        //            editButton.trailingAnchor.constraint(equalTo: reviewCard.trailingAnchor, constant: -16),
-        //        ])
         
-        //Special to sliders
         var lastView: UIView = reviewTitleLabel
         
         lastView = addRatingRow(name: "Graphics", field: graphicsField, topView: lastView)
@@ -325,22 +274,6 @@ class GameDetailViewController: UIViewController {
             make.height.equalTo(44)
             make.bottom.equalToSuperview().inset(24)
         }
-        
-        
-//        NSLayoutConstraint.activate([
-//            reviewTextView.topAnchor.constraint(equalTo: lastAnchor, constant: 16),
-//            reviewTextView.leadingAnchor.constraint(equalTo: reviewCard.leadingAnchor, constant: 16),
-//            reviewTextView.trailingAnchor.constraint(equalTo: reviewCard.trailingAnchor, constant: -16),
-//            reviewTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 100),
-//            
-//            saveButton.topAnchor.constraint(equalTo: reviewTextView.bottomAnchor, constant: 16),
-//            saveButton.leadingAnchor.constraint(equalTo: reviewCard.leadingAnchor, constant: 16),
-//            saveButton.trailingAnchor.constraint(equalTo: reviewCard.trailingAnchor, constant: -16),
-//            saveButton.heightAnchor.constraint(equalToConstant: 44),
-//            saveButton.bottomAnchor.constraint(equalTo: reviewCard.bottomAnchor, constant: -16),
-//
-//            reviewCard.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
-//        ])
     }
     
     private func addRatingRow(name: String, field: UITextField, topView: UIView) -> UIView {
