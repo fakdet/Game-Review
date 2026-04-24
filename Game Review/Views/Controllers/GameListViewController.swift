@@ -84,13 +84,6 @@ class GameListViewController: UIViewController {
         setupUI()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if let category = category {
-            viewModel.fetchGames(for: category)
-        }
-    }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateFooter()
@@ -248,7 +241,7 @@ extension GameListViewController: UITableViewDelegate, UITableViewDataSource {
         
         cell.configure(with: game) { [weak self] newStatus in
             self?.viewModel.changeStatus(of: game, to: newStatus)
-            self?.tableView.reloadRows(at: [indexPath], with: .automatic)  // ← only reload this row
+            self?.updateTableView()
             self?.updateFooter()
             self?.updateEmptyState()
         }

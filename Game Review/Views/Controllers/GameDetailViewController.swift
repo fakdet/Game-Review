@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class GameDetailViewController: UIViewController {
     
@@ -28,6 +29,16 @@ class GameDetailViewController: UIViewController {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
+    }()
+    
+    private let gameImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .scaleAspectFill
+        iv.clipsToBounds = true
+        iv.layer.cornerRadius = 12
+        iv.backgroundColor = .systemGray5
+        return iv
     }()
     
     private let gameTitleLabel: UILabel = {
@@ -142,18 +153,27 @@ class GameDetailViewController: UIViewController {
         super.viewDidLoad()
         reviewTextView.delegate = self
         
+        scrollView.alwaysBounceVertical = true
+        scrollView.contentInsetAdjustmentBehavior = .automatic
+
         view.backgroundColor = .systemBackground
         title = viewModel.title
 
         setupUI()
+        view.layoutIfNeeded()
         populateData()
         setupActions()
+        viewModel.onPublisherLoaded = { [weak self] publisher in
+            self?.publisherLabel.text = "Publisher: \(publisher)"
+        }
+        viewModel.fetchPublisher()
     }
     
     private func setupUI() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(gameTitleLabel)
+        contentView.addSubview(gameImageView)
         contentView.addSubview(infoCard)
         //Info Card
         infoCard.addSubview(publisherLabel)
@@ -172,12 +192,19 @@ class GameDetailViewController: UIViewController {
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
             
-            gameTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            gameImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            gameImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            gameImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            gameImageView.heightAnchor.constraint(equalToConstant: 200),
+            
+            gameTitleLabel.topAnchor.constraint(equalTo: gameImageView.bottomAnchor, constant: 16),
             gameTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             gameTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
@@ -241,7 +268,8 @@ class GameDetailViewController: UIViewController {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = name
         titleLabel.font = .systemFont(ofSize: 15, weight: .medium)
-        titleLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        titleLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        titleLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         
         let row = UIStackView(arrangedSubviews: [titleLabel, field])
         row.translatesAutoresizingMaskIntoConstraints = false
@@ -343,6 +371,10 @@ class GameDetailViewController: UIViewController {
         } else {
             setEditingMode(true)
             editButton.isHidden = true
+        }
+        
+        if let urlString = viewModel.game.imageURL, let url = URL(string: urlString) {
+            gameImageView.kf.setImage(with: url, placeholder: UIImage(systemName: "photo"))
         }
     }
     

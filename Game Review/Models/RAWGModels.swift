@@ -49,3 +49,7 @@ struct RAWGGame: Codable, Sendable {
 struct RAWGPublisher: Codable, Sendable {
     let name: String
 }
+
+struct RAWGGameDetail: Codable, Sendable {
+    let publishers: [RAWGPublisher]?
+}

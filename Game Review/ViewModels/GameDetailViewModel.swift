@@ -9,13 +9,15 @@ import Foundation
 
 class GameDetailViewModel {
     private(set) var game: Game
-    
+    var onPublisherLoaded: ((String) -> Void)?
+
     init(game: Game){
         self.game = game
     }
     
     //MARK: - Information
     var title: String { game.title }
+    var imageURL: String? { game.imageURL }
     var publisher: String{ game.publisher ?? "Unknown"}
     var releaseDate: String{ game.releaseDate ?? "Unknown"}
     var hasReview: Bool { game.review != nil }
@@ -59,5 +61,17 @@ class GameDetailViewModel {
         
         RealmManager.shared.saveGameData(id: game.id, status: .reviewed, review: newReview)
     }
+    
+    
+    func fetchPublisher() {
+        NetworkManager.shared.fetchGameDetail(id: game.id) { [weak self] publisherName in
+            DispatchQueue.main.async {
+                if let name = publisherName {
+                    self?.onPublisherLoaded?(name)
+                }
+            }
+        }
+    }
+    
     
 }
