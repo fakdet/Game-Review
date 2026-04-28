@@ -4,24 +4,28 @@
 //
 //  Created by M.  Azizcan Erdoğan on 17.04.2026.
 //
-import Foundation
 import UIKit
 import SnapKit
 
-class CategoryViewController: UIViewController{
-    
-    //MARK: Properties
-    private let viewModel = CategoryListViewModel()
-    
+class CategoryViewController: BaseViewController<CategoryListViewModel>{
     //MARK: UI elements
-    //Just the title on top of the collection view.
-    private var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Game Categories"
         label.font = UIFont.systemFont(ofSize: 26, weight: .bold)
         label.textAlignment = .center
         return label
+    }()
+    private lazy var collectionView: UICollectionView = {
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        cv.translatesAutoresizingMaskIntoConstraints = false
+        cv.backgroundColor = .systemBackground
+        cv.register(CategoryCell.self, forCellWithReuseIdentifier: "CategoryCell") // extension
+        cv.delegate = self
+        cv.dataSource = self
+        
+        return cv
     }()
     
     override func viewDidLoad() {
@@ -33,6 +37,32 @@ class CategoryViewController: UIViewController{
         viewModel.fetchCategories()
     }
     
+    override func setupUI()
+    {
+        view.addSubview(titleLabel)
+        view.addSubview(collectionView)
+        
+        setupCollectionViewLayout()
+    }
+    
+    override func setupConstraints() {
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
+            make.leading.trailing.equalToSuperview()
+        }
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(16)
+            make.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+        }
+    }
+    
+    override func bindViewModel() {
+        viewModel.onDataUpdated  = { [weak self] in
+            self?.collectionView.reloadData()
+        }
+    }
+
     private func setupCollectionViewLayout() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -46,45 +76,6 @@ class CategoryViewController: UIViewController{
         
         collectionView.setCollectionViewLayout(layout, animated: false)
     }
-    
-    private lazy var collectionView: UICollectionView = {
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.backgroundColor = .systemBackground
-        cv.register(CategoryCell.self, forCellWithReuseIdentifier: "CategoryCell") // extension
-        cv.delegate = self
-        cv.dataSource = self
-        
-        return cv
-    }()
-    
-    
-    private func setupUI()
-    {
-        view.addSubview(titleLabel)
-        view.addSubview(collectionView)
-        
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
-            make.leading.trailing.equalToSuperview()
-        }
-        
-        collectionView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(16)
-            make.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview()
-        }
-    }
-    
-    private func bindViewModel() {
-        viewModel.onDataUpdated  = { [weak self] in
-            self?.collectionView.reloadData()
-        }
-        
-        viewModel.onError = { error in
-            print("Error!: \(error)")
-        }
-    }
 }
 
 extension CategoryViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -93,17 +84,18 @@ extension CategoryViewController: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell
-        let category = viewModel.category(at: indexPath.row)
-        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell // Extension
+        guard let category = viewModel.category(at: indexPath.row) else {
+            return cell
+        }
         cell.configure(with: category.name, imageURL: category.imageURL)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath){
-        let category = viewModel.category(at: indexPath.item)
-        let vc = GameListViewController()
-        vc.category = category
+        guard let category = viewModel.category(at: indexPath.item) else { return }
+        let gameListVM = GameListViewModel(category: category)
+        let vc = GameListViewController(viewModel: gameListVM)
         navigationController?.pushViewController(vc, animated: true)
     }
 }

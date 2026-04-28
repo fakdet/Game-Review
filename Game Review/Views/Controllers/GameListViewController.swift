@@ -9,61 +9,58 @@ import Foundation
 import UIKit
 import SnapKit
 
-class GameListViewController: UIViewController {
-    
-    //MARK: Properties
-    private let viewModel = GameListViewModel()
-    var category: Category?
-    
+class GameListViewController: BaseViewController<GameListViewModel> {
     
     //MARK: UI elements
-    
-    //I want a search bar, filter and a sort button. and then a table view
-    
-    private let searchBar: UISearchBar = {
+    private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.placeholder = "Search for a game"
+        searchBar.delegate = self
         return searchBar
     }()
-    
-    private let filterButton: UIButton = {
+    private lazy var filterButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Filter", for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
+        button.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         return button
     }()
-    
-    private let emptyLabel: UILabel = {
+    private lazy var tableView: UITableView = {
+        let tv = UITableView(frame: .zero)
+        tv.backgroundColor = .systemBackground
+        tv.register(GameCell.self, forCellReuseIdentifier: "GameCell") // Extension
+        tv.backgroundColor = .systemGray6
+        tv.layer.cornerRadius = 10
+        tv.clipsToBounds = true
+        tv.separatorStyle = .none
+        tv.delegate = self
+        tv.dataSource = self
+        return tv
+    }()
+    private lazy var emptyLabel: UILabel = {
         let label = UILabel()
         label.text = "No games were found based on your search results"
         label.textAlignment = .center
         label.textColor = .secondaryLabel
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.numberOfLines = 0
+        label.isHidden = true
         return label
     }()
-    
-    private let footerView: UIView = {
+    private lazy var footerView: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .systemGray6
         view.layer.cornerRadius = 10
         return view
     }()
-    
-    private let footerLabel: UILabel = {
+    private lazy var footerLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 14, weight: .medium)
         label.textAlignment = .center
         return label
     }()
-    
-    private let progressBar: UIView = {
+    private lazy var progressBar: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .systemGray4
         view.layer.cornerRadius = 4
         view.clipsToBounds = true
@@ -72,49 +69,27 @@ class GameListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
         
-        searchBar.delegate = self
-        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
-        
-        bindViewModel()
-        if let category = category{
-            title = category.name
-            viewModel.fetchGames(for: category)
-        }
-        setupUI()
+        title = viewModel.categoryName
+        viewModel.fetchGames()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateFooter()
     }
-    
-    private lazy var tableView: UITableView = {
-        let tv = UITableView(frame: .zero)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .systemBackground
-        tv.register(GameCell.self, forCellReuseIdentifier: "GameCell")
-        tv.delegate = self
-        tv.dataSource = self
-        
-        return tv
-    }()
-    
-    private func setupUI()
+    //MARK: - Setup
+    override func setupUI()
     {
+        view.backgroundColor = .systemBackground
         view.addSubview(searchBar)
         view.addSubview(filterButton)
         view.addSubview(tableView)
         view.addSubview(footerView)
         footerView.addSubview(footerLabel)
         footerView.addSubview(progressBar)
-        
-        tableView.backgroundColor = .systemGray6
-        tableView.layer.cornerRadius = 10
-        tableView.clipsToBounds = true
-        tableView.separatorStyle = .none
-        
+    }
+    override func setupConstraints() {
         searchBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
             make.leading.trailing.equalToSuperview()
@@ -149,43 +124,26 @@ class GameListViewController: UIViewController {
             make.bottom.equalToSuperview().offset(-8)
         }
     }
-    @objc private func filterButtonTapped(){
-        let actionSheet = UIAlertController(title: "Filter By Status", message: nil, preferredStyle: .actionSheet)
-        
-        actionSheet.addAction(UIAlertAction(title: "All", style: .default) { _ in
-            self.viewModel.filterByStatus(nil)
-            self.updateTableView()
-        })
-        
-        actionSheet.addAction(UIAlertAction(title: "Unplayed", style: .default) { _ in
-            self.viewModel.filterByStatus(.unplayed)
-            self.updateTableView()
-        })
-        
-        actionSheet.addAction(UIAlertAction(title: "Playing", style: .default) { _ in
-            self.viewModel.filterByStatus(.playing)
-            self.updateTableView()
-        })
-        
-        actionSheet.addAction(UIAlertAction(title: "Finished", style: .default) { _ in
-            self.viewModel.filterByStatus(.finished)
-            self.updateTableView()
-        })
-        
-        actionSheet.addAction(UIAlertAction(title: "Reviewed", style: .default) { _ in
-            self.viewModel.filterByStatus(.reviewed)
-            self.updateTableView()
-        })
-        
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        
-        present(actionSheet, animated: true)
+    
+    // MARK: - Binding
+    override func bindViewModel() {
+        viewModel.onDataUpdated = { [weak self] in
+            self?.updateTableView()
+        }
+        viewModel.onError = { error in
+            print("Error!: \(error)")
+        }
     }
     
+    //MARK: - UI Logic
+    private func updateTableView() {
+        tableView.reloadData()
+        updateEmptyState()
+        updateFooter()
+    }
     private func updateEmptyState() {
         tableView.backgroundView = viewModel.numberOfItems() == 0 ? emptyLabel : nil
     }
-    
     private func updateFooter() {
         let total = viewModel.numberOfItems()
         let unplayed = viewModel.count(for: .unplayed)
@@ -197,7 +155,6 @@ class GameListViewController: UIViewController {
         
         //remove old segments
         progressBar.subviews.forEach { $0.removeFromSuperview() }
-
         guard total > 0 else { return }
         
         let segments: [(Int, UIColor)] = [
@@ -219,19 +176,25 @@ class GameListViewController: UIViewController {
         }
     }
     
-    private func updateTableView() {
-        tableView.reloadData()
-        updateEmptyState()
-        updateFooter()
-    }
-    
-    private func bindViewModel() {
-        viewModel.onDataUpdated = { [weak self] in
-            self?.updateTableView()
+    //MARK: - Actions
+    @objc private func filterButtonTapped(){
+        let actionSheet = UIAlertController(title: "Filter By Status", message: nil, preferredStyle: .actionSheet)
+        let filterOptions: [(String, GameStatus?)] = [
+                    ("All", nil),
+                    ("Unplayed", .unplayed),
+                    ("Playing", .playing),
+                    ("Finished", .finished),
+                    ("Reviewed", .reviewed)
+                ]
+        
+        for option in filterOptions {
+            actionSheet.addAction(UIAlertAction(title: option.0, style: .default) { _ in
+                self.viewModel.filterByStatus(option.1)
+                self.updateTableView()
+            })
         }
-        viewModel.onError = { error in
-            print("Error!: \(error)")
-        }
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(actionSheet, animated: true)
     }
 }
 
@@ -241,7 +204,7 @@ extension GameListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! GameCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! GameCell // Extension
         let game = viewModel.game(at: indexPath.row)
         
         cell.configure(with: game) { [weak self] newStatus in
@@ -251,18 +214,18 @@ extension GameListViewController: UITableViewDelegate, UITableViewDataSource {
             if let existingCell = self.tableView.cellForRow(at: indexPath) as? GameCell {
                 existingCell.updateStatusOnly(to: newStatus)
             }
-            
             self.updateFooter()
             self.updateEmptyState()
         }
-        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let game = viewModel.game(at: indexPath.row)
-        let detailVC = GameDetailViewController(game: game)
+        
+        let detailVM = GameDetailViewModel(game: game)
+        let detailVC = GameDetailViewController(viewModel: detailVM)
         
         detailVC.delegate = self
         navigationController?.pushViewController(detailVC, animated: true)

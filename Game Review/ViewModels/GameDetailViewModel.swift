@@ -7,12 +7,14 @@
 
 import Foundation
 
-class GameDetailViewModel {
+class GameDetailViewModel: BaseViewModel{
+    //MARK: - Properties
     private(set) var game: Game
     var onPublisherLoaded: ((String) -> Void)?
 
     init(game: Game){
         self.game = game
+        super.init()
     }
     
     //MARK: - Information
@@ -25,14 +27,14 @@ class GameDetailViewModel {
     var status: String {
         switch game.status {
         case .unplayed: return "Unplayed"
-        case .playing: return "Playing"
+        case .playing:  return "Playing"
         case .finished: return "Finished"
         case .reviewed: return "Reviewed"
         }
     }
     
     
-    //MARK: - Review
+    //MARK: - Review - Extension
     var graphics: Double    { game.review?.graphics ?? 0 }
     var soundDesign: Double { game.review?.soundDesign ?? 0 }
     var artDesign: Double   { game.review?.artDesign ?? 0 }
@@ -57,6 +59,7 @@ class GameDetailViewModel {
         game.rating = overall
         
         RealmManager.shared.saveGameData(id: game.id, status: .reviewed, review: newReview)
+        onDataUpdated?()
     }
     
     
@@ -64,6 +67,7 @@ class GameDetailViewModel {
         NetworkManager.shared.fetchGameDetail(id: game.id) { [weak self] publisherName in
             DispatchQueue.main.async {
                 if let name = publisherName {
+                    self?.game.publisher = name
                     self?.onPublisherLoaded?(name)
                 }
             }

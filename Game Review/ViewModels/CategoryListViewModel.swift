@@ -7,22 +7,14 @@
 
 import Foundation
 
-class CategoryListViewModel{
-    //MARK: - This category array is temporary, will change later and be filled with API.
+class CategoryListViewModel: BaseViewModel{
     private var categories: [Category] = []
-    var onDataUpdated: (() -> Void)?
-    var onError: ((String) -> Void)?
     
     func fetchCategories() {
+        isLoading?(true)
         NetworkManager.shared.fetchGenres { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let categories):
-                    self?.categories = categories
-                    self?.onDataUpdated?()
-                case .failure(let error):
-                    self?.onError?(error.localizedDescription)
-                }
+            self?.handleResult(result) { categories in
+                self?.categories = categories
             }
         }
     }
@@ -30,15 +22,12 @@ class CategoryListViewModel{
     func numberOfItems() -> Int {
         return categories.count
     }
-    
-    func category(at index: Int) -> Category {
+    func category(at index: Int) -> Category? {
         return categories[index]
     }
-    
     func title(for index: Int) -> String {
         return categories[index].name
     }
-    
     func imageURL(for index: Int) -> String? {
         return categories[index].imageURL
     }

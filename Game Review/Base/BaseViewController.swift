@@ -38,7 +38,6 @@ class BaseViewController<T: BaseViewModel>: UIViewController {
         viewModel.onError = { [weak self] errorMessage in
             self?.showErrorAlert(message: errorMessage)
         }
-        
         viewModel.isLoading = { [weak self] loading in
             self?.handleLoadingState(loading)
         }

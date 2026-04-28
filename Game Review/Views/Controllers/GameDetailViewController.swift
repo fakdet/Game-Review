@@ -9,106 +9,93 @@ import UIKit
 import Kingfisher
 import SnapKit
 
-class GameDetailViewController: UIViewController {
+class GameDetailViewController: BaseViewController<GameDetailViewModel> {
     
     //MARK: - Properties
-    private var viewModel: GameDetailViewModel
     private var isEditingReview: Bool = false
-    
-    //MARK: - Delegate
     weak var delegate: GameDetailDelegate?
     
     
     //MARK: - UI Elements
-    private let scrollView: UIScrollView = {
+    private lazy var scrollView: UIScrollView = {
         let sv = UIScrollView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
+        sv.alwaysBounceVertical = true
+        sv.contentInsetAdjustmentBehavior = .automatic
         return sv
     }()
-    private let contentView: UIView = {
+    private lazy var contentView: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    private let gameImageView: UIImageView = {
+    private lazy var gameImageView: UIImageView = {
         let iv = UIImageView()
-        iv.translatesAutoresizingMaskIntoConstraints = false
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 12
         iv.backgroundColor = .systemGray5
         return iv
     }()
-    private let gameTitleLabel: UILabel = {
+    private lazy var gameTitleLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 28, weight: .bold)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
     }()
-    private let infoCard: UIView = {
+    private lazy var infoCard: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .systemGray6
         view.layer.cornerRadius = 12
         return view
     }()
-    private let publisherLabel: UILabel = {
+    private lazy var publisherLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 18)
         label.numberOfLines = 0
         return label
     }()
-    private let releaseDateLabel: UILabel = {
+    private lazy var releaseDateLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 18)
         label.numberOfLines = 0
         return label
     }()
-    private let statusLabel: UILabel = {
+    private lazy var statusLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 18)
         label.numberOfLines = 0
         return label
     }()
-    private let reviewCard: UIView = {
+    private lazy var reviewCard: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .systemGray6
         view.layer.cornerRadius = 12
         return view
     }()
-    private let reviewTitleLabel: UILabel = {
+    private lazy var reviewTitleLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Review"
         label.font = .systemFont(ofSize: 20, weight: .bold)
         return label
     }()
-    private let editButton: UIButton = {
+    private lazy var editButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Edit", for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
         return button
     }()
     
     // MARK: - Fields
-    private let graphicsField = GameDetailViewController.makeRatingField()
-    private let soundField = GameDetailViewController.makeRatingField()
-    private let artField = GameDetailViewController.makeRatingField()
-    private let gameplayField = GameDetailViewController.makeRatingField()
-    private let storyField = GameDetailViewController.makeRatingField()
-    private let overallField = GameDetailViewController.makeRatingField()
+    private lazy var graphicsField = makeRatingField()
+    private lazy var soundField = makeRatingField()
+    private lazy var artField = makeRatingField()
+    private lazy var gameplayField = makeRatingField()
+    private lazy var storyField = makeRatingField()
+    private lazy var overallField = makeRatingField()
     
     //MARK: - Review Text
-    private let reviewTextView: UITextView = {
+    private lazy var reviewTextView: UITextView = {
         let tv = UITextView()
-        tv.translatesAutoresizingMaskIntoConstraints = false
         tv.font = .systemFont(ofSize: 15)
         tv.backgroundColor = .systemBackground
         tv.layer.cornerRadius = 8
@@ -116,9 +103,10 @@ class GameDetailViewController: UIViewController {
         tv.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         tv.text = "Write Your Review Here.."
         tv.textColor = .placeholderText
+        tv.delegate = self
         return tv
     }()
-    private let saveButton: UIButton = {
+    private lazy var saveButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Save Review", for: .normal)
@@ -128,38 +116,20 @@ class GameDetailViewController: UIViewController {
         return button
     }()
     
-    
-    
-    init(game: Game) {
-        self.viewModel = GameDetailViewModel(game: game)
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        reviewTextView.delegate = self
-        
-        scrollView.alwaysBounceVertical = true
-        scrollView.contentInsetAdjustmentBehavior = .automatic
-
-        view.backgroundColor = .systemBackground
         title = viewModel.title
 
-        setupUI()
         populateData()
         setupActions()
         setupKeyboardDismissal()
-        viewModel.onPublisherLoaded = { [weak self] publisher in
-            self?.publisherLabel.text = "Publisher: \(publisher)"
-        }
+//        viewModel.onPublisherLoaded = { [weak self] publisher in
+//            self?.publisherLabel.text = "Publisher: \(publisher)"
+//        }
         viewModel.fetchPublisher()
     }
     
-    private func setupUI() {
+    override func setupUI() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(gameImageView)
@@ -175,7 +145,9 @@ class GameDetailViewController: UIViewController {
         reviewCard.addSubview(editButton)
         reviewCard.addSubview(reviewTextView)
         reviewCard.addSubview(saveButton)
-        
+    }
+    
+    override func setupConstraints() {
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
             make.leading.trailing.equalToSuperview()
@@ -183,9 +155,6 @@ class GameDetailViewController: UIViewController {
         }
         
         contentView.snp.makeConstraints { make in
-//          make.top.equalToSuperview()
-//          make.leading.trailing.equalToSuperview()
-//          make.bottom.equalToSuperview()
             make.edges.equalTo(scrollView.contentLayoutGuide)
             make.width.equalTo(scrollView.frameLayoutGuide)
         }
@@ -240,7 +209,6 @@ class GameDetailViewController: UIViewController {
             make.trailing.equalToSuperview().inset(16)
         }
         
-        
         var lastView: UIView = reviewTitleLabel
         
         lastView = addRatingRow(name: "Graphics", field: graphicsField, topView: lastView)
@@ -249,7 +217,6 @@ class GameDetailViewController: UIViewController {
         lastView = addRatingRow(name: "Gameplay", field: gameplayField, topView: lastView)
         lastView = addRatingRow(name: "Story", field: storyField, topView: lastView)
         lastView = addRatingRow(name: "Overall", field: overallField, topView: lastView)
-        
         
         reviewTextView.snp.makeConstraints { make in
             make.top.equalTo(lastView.snp.bottom).offset(16)
@@ -264,6 +231,26 @@ class GameDetailViewController: UIViewController {
             make.bottom.equalToSuperview().inset(24)
         }
     }
+    
+    override func bindViewModel() {
+        viewModel.onPublisherLoaded = { [weak self] publisher in
+            self?.publisherLabel.text = "Publisher: \(publisher)"
+        }
+        
+        viewModel.onDataUpdated = { [weak self] in
+            self?.populateData()
+        }
+    }
+    
+    //MARK: - Logic & Actions
+    private func setupActions() {
+        let fields = [graphicsField, soundField, artField, gameplayField, storyField, overallField]
+        fields.forEach { $0.delegate = self }
+        
+        editButton.addTarget(self, action: #selector(editTapped), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
+    }
+
     private func setupKeyboardDismissal() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         
@@ -277,47 +264,15 @@ class GameDetailViewController: UIViewController {
         view.endEditing(true)
     }
     
-    private func addRatingRow(name: String, field: UITextField, topView: UIView) -> UIView {
-
-        let titleLabel = UILabel()
-        titleLabel.text = name
-        titleLabel.font = .systemFont(ofSize: 15, weight: .medium)
-        titleLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        titleLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-
-        let row = UIStackView(arrangedSubviews: [titleLabel, field])
-        row.axis = .horizontal
-        row.spacing = 8
-        row.alignment = .center
-
-        reviewCard.addSubview(row)
-
-        row.snp.makeConstraints { make in
-            make.top.equalTo(topView.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
-
-        return row
-    }
-    
-    private func setupActions() {
-        let fields = [graphicsField, soundField, artField, gameplayField, storyField, overallField]
-        fields.forEach { $0.delegate = self }
-        
-        editButton.addTarget(self, action: #selector(editTapped), for: .touchUpInside)
-        saveButton.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
-    }
-
     private func setEditingMode(_ editing: Bool) {
         isEditingReview = editing
-        
-        if !editing {
-            view.endEditing(true)
-        }
+        if !editing { view.endEditing(true) }
         
         let fields = [graphicsField, soundField, artField, gameplayField, storyField, overallField]
-        fields.forEach { $0.isUserInteractionEnabled = editing }
-        fields.forEach { $0.alpha = editing ? 1.0 : 0.5 }
+        fields.forEach { 
+            $0.isUserInteractionEnabled = editing
+            $0.alpha = editing ? 1.0 : 0.5
+        }
         
         reviewTextView.isEditable = editing
         reviewTextView.alpha = editing ? 1.0 : 0.8
@@ -326,27 +281,15 @@ class GameDetailViewController: UIViewController {
         editButton.setTitle(editing ? "Cancel" : "Edit", for: .normal)
     }
     
-    private static func makeRatingField() -> UITextField {
-        let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.borderStyle = .roundedRect
-        tf.keyboardType = .decimalPad
-        tf.textAlignment = .center
-        tf.placeholder = "0.0"
-        tf.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        return tf
-    }
-    
     @objc private func editTapped() {
         if isEditingReview {
-            //reload original data
-            populateData()
+            populateData() //reload original data
             setEditingMode(false)
         } else {
             setEditingMode(true)
         }
     }
-    
+    //Extension
     @objc private func saveTapped() {
         viewModel.saveReview(
             graphics:    Double(graphicsField.text ?? "0") ?? 0,
@@ -364,7 +307,6 @@ class GameDetailViewController: UIViewController {
         
         delegate?.didUpdateGame(viewModel.game)
     }
-    
     private func populateData(){
         gameTitleLabel.text = viewModel.title
         publisherLabel.text = "Publisher: \(viewModel.publisher)"
@@ -393,7 +335,42 @@ class GameDetailViewController: UIViewController {
             gameImageView.kf.setImage(with: url, placeholder: UIImage(systemName: "photo"))
         }
     }
+    //MARK: - Helpers
+    private func makeRatingField() -> UITextField {
+        let tf = UITextField()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.borderStyle = .roundedRect
+        tf.keyboardType = .decimalPad
+        tf.textAlignment = .center
+        tf.placeholder = "0.0"
+        tf.snp.makeConstraints { make in
+            make.width.equalTo(60)
+        }
+        return tf
+    }
     
+    private func addRatingRow(name: String, field: UITextField, topView: UIView) -> UIView {
+
+        let titleLabel = UILabel()
+        titleLabel.text = name
+        titleLabel.font = .systemFont(ofSize: 15, weight: .medium)
+        titleLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        titleLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+
+        let row = UIStackView(arrangedSubviews: [titleLabel, field])
+        row.axis = .horizontal
+        row.spacing = 8
+        row.alignment = .center
+
+        reviewCard.addSubview(row)
+
+        row.snp.makeConstraints { make in
+            make.top.equalTo(topView.snp.bottom).offset(16)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+
+        return row
+    }
 }
 
 

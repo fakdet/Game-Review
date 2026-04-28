@@ -7,38 +7,47 @@
 
 import Foundation
 
-class GameListViewModel{
-    private var currentCategory: Category?
-    //MARK: This game array is temporary, will change later and be filled with API.
+class GameListViewModel: BaseViewModel{
+    private let category: Category
     private var allGames: [Game] = []
     private var filteredGames: [Game] = []
     
-    var onDataUpdated: (() -> Void)?
-    var onError: ((String) -> Void)?
-    
-    func fetchGames(for category: Category) {
-        currentCategory = category
+    var categoryName: String {
+            return category.name
+        }
+    //MARK: - init
+    init(category: Category){
+        self.category = category
+        super.init()
+    }
+    func fetchGames() {
+        isLoading?(true)
+        
         NetworkManager.shared.fetchGames(genreID: category.id) { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let games):
-                    self?.allGames = games.map { apiGame in
-                        var game = apiGame
-                        if let local = RealmManager.shared.getLocalData(for: game.id) {
-                            game.status = GameStatus(rawValue: local.status) ?? .unplayed
-                            if let lr = local.review {
-                                game.review = Review(graphics: lr.graphics, soundDesign: lr.soundDesign, artDesign: lr.artDesign, gameplay: lr.gameplay, story: lr.story, overallRating: lr.overallRating, text: lr.text)
-                                game.rating = lr.overallRating
-                            }
-                        }
-                        return game
-                    }
-                    self?.filteredGames = self?.allGames ?? []
-                    self?.onDataUpdated?()
+            self?.handleResult(result) { apiGames in
+                let mappedGames = apiGames.map { apiGame in
+                    var game = apiGame
                     
-                case .failure(let error):
-                    self?.onError?(error.localizedDescription)
+                    if let local = RealmManager.shared.getLocalData(for: game.id) {
+                        game.status = GameStatus(rawValue: local.status) ?? .unplayed // extension
+                        if let lr = local.review {
+                            game.review = Review(
+                                graphics: lr.graphics,
+                                soundDesign: lr.soundDesign,
+                                artDesign: lr.artDesign,
+                                gameplay: lr.gameplay,
+                                story: lr.story,
+                                overallRating: lr.overallRating,
+                                text: lr.text
+                            )
+                            game.rating = lr.overallRating
+                        }
+                    }
+                    return game
                 }
+                self?.allGames = mappedGames
+                self?.filteredGames = mappedGames
+                self?.onDataUpdated?()
             }
         }
     }
@@ -49,34 +58,31 @@ class GameListViewModel{
     
     func game(at index: Int) -> Game{
         return filteredGames[index]
+        
     }
     
     func title(for index:Int) -> String{
         return filteredGames[index].title
     }
     
-    func filterGames(by category: Category){
-        currentCategory = category
-        filteredGames = allGames.filter { $0.categoryIDs.contains(category.id) }
-    }
-    
     func filterGames(by searchText: String){
-        filteredGames = allGames.filter { $0.categoryIDs.contains(currentCategory?.id ?? -1) }
+        filteredGames = allGames.filter { $0.categoryIDs.contains(category.id) }
         if !searchText.isEmpty{
             filteredGames = filteredGames.filter { $0.title.lowercased().contains(searchText.lowercased()) }
         }
+        onDataUpdated?()
     }
     
     func filterByStatus(_ status: GameStatus?){
         if let status = status {
             filteredGames = allGames.filter {
-                $0.categoryIDs.contains(currentCategory?.id ?? -1) &&
-                $0.status == status
+                $0.categoryIDs.contains(category.id) && $0.status == status
             }
         } else {
             //status variable can be null, this just means it will show all.
-            filterGames(by: currentCategory!)
+            filteredGames = allGames
         }
+        onDataUpdated?()
     }
     
     func count(for status: GameStatus) -> Int{
@@ -87,33 +93,30 @@ class GameListViewModel{
         guard let index = allGames.firstIndex(where: { $0.id == game.id }) else { return }
         
         var updatedGame = allGames[index]
-        updatedGame = Game(
-            id: updatedGame.id,
-            title: updatedGame.title,
-            categoryIDs: updatedGame.categoryIDs,
-            rating: updatedGame.status == .reviewed ? nil : updatedGame.rating,
-            status: newStatus,
-            publisher: updatedGame.publisher,
-            releaseDate: updatedGame.releaseDate,
-            review: updatedGame.review,
-            imageURL: updatedGame.imageURL
-        )
+        updatedGame.status = newStatus
+        
+        if newStatus != .reviewed {
+            updatedGame.rating = nil
+        }
+        
         allGames[index] = updatedGame
         
-        RealmManager.shared.saveGameData(id: updatedGame.id, status: newStatus, review: updatedGame.review)
+        RealmManager.shared.saveGameData(
+            id: updatedGame.id,
+            status: newStatus,
+            review: updatedGame.review
+        )
         
-        if let category = currentCategory {
-            filterGames(by: category)
-        }
+        filteredGames = allGames.filter { $0.categoryIDs.contains(category.id) }
+                onDataUpdated?()
         
     }
     
     func updateGame(_ updatedGame: Game) {
-        guard let index = allGames.firstIndex(where: { $0.id == updatedGame.id }) else { return }
-        allGames[index] = updatedGame
-        if let category = currentCategory {
-            filterGames(by: category)
+            guard let index = allGames.firstIndex(where: { $0.id == updatedGame.id }) else { return }
+            allGames[index] = updatedGame
+            filteredGames = allGames.filter { $0.categoryIDs.contains(category.id) }
+            onDataUpdated?()
         }
-    }
     
 }
