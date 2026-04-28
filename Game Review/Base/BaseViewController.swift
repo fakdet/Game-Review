@@ -48,6 +48,6 @@ class BaseViewController<T: BaseViewModel>: UIViewController {
         present(alert, animated: true)
     }
     private func handleLoadingState(_ loading: Bool) {
-        //Add a global spinner for showing loading state
+        //TO-DO add loading spiral
     }
 }

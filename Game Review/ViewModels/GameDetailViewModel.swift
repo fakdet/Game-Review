@@ -34,14 +34,14 @@ class GameDetailViewModel: BaseViewModel{
     }
     
     
-    //MARK: - Review - Extension
-    var graphics: Double    { game.review?.graphics ?? 0 }
-    var soundDesign: Double { game.review?.soundDesign ?? 0 }
-    var artDesign: Double   { game.review?.artDesign ?? 0 }
-    var gameplay: Double    { game.review?.gameplay ?? 0 }
-    var story: Double       { game.review?.story ?? 0 }
-    var overallRating: Double { game.review?.overallRating ?? 0 }
-    var reviewText: String  { game.review?.text ?? "" }
+    //MARK: - Review - Extension x
+    var graphics: Double      { game.safeReview.graphics }
+    var soundDesign: Double   { game.safeReview.sound }
+    var artDesign: Double     { game.safeReview.art }
+    var gameplay: Double      { game.safeReview.gameplay }
+    var story: Double         { game.safeReview.story }
+    var overallRating: Double { game.safeReview.overall }
+    var reviewText: String    { game.safeReview.text}
     
     func saveReview(graphics: Double, soundDesign: Double, artDesign: Double,
                     gameplay: Double, story: Double, overall: Double, text: String) {

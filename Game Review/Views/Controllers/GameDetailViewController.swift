@@ -84,7 +84,6 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
         button.setTitleColor(.systemBlue, for: .normal)
         return button
     }()
-    
     // MARK: - Fields
     private lazy var graphicsField = makeRatingField()
     private lazy var soundField = makeRatingField()
@@ -92,7 +91,6 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
     private lazy var gameplayField = makeRatingField()
     private lazy var storyField = makeRatingField()
     private lazy var overallField = makeRatingField()
-    
     //MARK: - Review Text
     private lazy var reviewTextView: UITextView = {
         let tv = UITextView()
@@ -108,7 +106,6 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
     }()
     private lazy var saveButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Save Review", for: .normal)
         button.backgroundColor = .systemBlue
         button.setTitleColor(.white, for: .normal)
@@ -289,15 +286,15 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
             setEditingMode(true)
         }
     }
-    //Extension
+    
     @objc private func saveTapped() {
         viewModel.saveReview(
-            graphics:    Double(graphicsField.text ?? "0") ?? 0,
-            soundDesign: Double(soundField.text ?? "0") ?? 0,
-            artDesign:   Double(artField.text ?? "0") ?? 0,
-            gameplay:    Double(gameplayField.text ?? "0") ?? 0,
-            story:       Double(storyField.text ?? "0") ?? 0,
-            overall:     Double(overallField.text ?? "0") ?? 0,
+            graphics:    graphicsField.doubleValue,
+            soundDesign: soundField.doubleValue,
+            artDesign:   artField.doubleValue,
+            gameplay:    gameplayField.doubleValue,
+            story:       storyField.doubleValue,
+            overall:     overallField.doubleValue,
             text:        reviewTextView.text ?? ""
         )
         
@@ -417,6 +414,11 @@ extension GameDetailViewController: UITextViewDelegate {
     }
 }
 
+extension UITextField {
+    var doubleValue: Double {
+        return Double(self.text ?? "") ?? 0.0
+    }
+}
 
 protocol GameDetailDelegate: AnyObject {
     func didUpdateGame(_ game: Game)

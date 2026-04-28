@@ -9,8 +9,6 @@ import Foundation
 import Alamofire
 
 class NetworkManager {
-    
-    //MARK: - Singleton
     static let shared = NetworkManager()
     private init() {}
     

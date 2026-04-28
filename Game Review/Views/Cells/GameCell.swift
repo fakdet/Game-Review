@@ -11,20 +11,29 @@ import SnapKit
 
 class GameCell: UITableViewCell{
     //MARK: - UI Elements
-    private let gameImageView: UIImageView = {
+    private lazy var gameImageView: UIImageView = {
         let iv = UIImageView()
-        iv.translatesAutoresizingMaskIntoConstraints = false
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 8
         iv.backgroundColor = .systemGray5
         return iv
     }()
-    private let titleLabel = UILabel()
-    private let ratingLabel = UILabel()
-    private let statusButton: UIButton = {
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 2
+        label.font = .systemFont(ofSize: 15, weight: .semibold)
+        return label
+    }()
+    private lazy var ratingLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.font = .systemFont(ofSize: 14, weight: .medium)
+        label.textAlignment = .center
+        return label
+    }()
+    private lazy var statusButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
         button.setTitleColor(.systemBlue, for: .normal)
         button.showsMenuAsPrimaryAction = true // To open the dropdown menu
@@ -34,6 +43,7 @@ class GameCell: UITableViewCell{
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
+        setupConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -46,19 +56,9 @@ class GameCell: UITableViewCell{
         contentView.addSubview(titleLabel)
         contentView.addSubview(ratingLabel)
         contentView.addSubview(statusButton)
-        
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        ratingLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        titleLabel.numberOfLines = 2
-        ratingLabel.numberOfLines = 1
-        
-        titleLabel.font = .systemFont(ofSize: 15, weight: .semibold)
-        ratingLabel.font = .systemFont(ofSize: 14, weight: .medium)
-        
-        ratingLabel.textAlignment = .center
-        
-        
+    }
+    
+    private func setupConstraints() {
         //LEFt - image
         gameImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(12)

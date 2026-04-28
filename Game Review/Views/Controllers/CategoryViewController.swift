@@ -11,7 +11,6 @@ class CategoryViewController: BaseViewController<CategoryListViewModel>{
     //MARK: UI elements
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Game Categories"
         label.font = UIFont.systemFont(ofSize: 26, weight: .bold)
         label.textAlignment = .center
@@ -19,9 +18,8 @@ class CategoryViewController: BaseViewController<CategoryListViewModel>{
     }()
     private lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        cv.translatesAutoresizingMaskIntoConstraints = false
         cv.backgroundColor = .systemBackground
-        cv.register(CategoryCell.self, forCellWithReuseIdentifier: "CategoryCell") // extension
+        cv.register(cellType: CategoryCell.self) // extension
         cv.delegate = self
         cv.dataSource = self
         
@@ -80,7 +78,7 @@ extension CategoryViewController: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell // Extension
+        let cell: CategoryCell = collectionView.dequeueReusableCell(for: indexPath)
         guard let category = viewModel.category(at: indexPath.row) else {
             return cell
         }
@@ -93,5 +91,19 @@ extension CategoryViewController: UICollectionViewDelegate, UICollectionViewData
         let gameListVM = GameListViewModel(category: category)
         let vc = GameListViewController(viewModel: gameListVM)
         navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+
+
+extension UICollectionView {
+    func dequeueReusableCell<T: UICollectionViewCell>(for indexpath: IndexPath) -> T {
+        guard let cell = dequeueReusableCell(withReuseIdentifier: T.identifier, for: indexpath) as? T else {
+            fatalError("Cell ws not able to be created: \(T.identifier)")
+        }
+        return cell
+    }
+    func register<T: UICollectionViewCell>(cellType: T.Type) {
+        register(cellType, forCellWithReuseIdentifier: T.identifier)
     }
 }

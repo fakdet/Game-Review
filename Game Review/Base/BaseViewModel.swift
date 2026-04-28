@@ -19,7 +19,6 @@ class BaseViewModel {
             case .success(let data):
                 completion(data)
                 self?.onDataUpdated?()
-            
             case .failure(let error):
                 self?.onError?(error.localizedDescription)
             }
