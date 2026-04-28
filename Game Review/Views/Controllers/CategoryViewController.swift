@@ -15,9 +15,9 @@ class CategoryViewController: UIViewController{
     
     //MARK: UI elements
     //Just the title on top of the collection view.
-    private let titleLabel: UILabel = {
+    private var titleLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false // This is needed for some reason
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Game Categories"
         label.font = UIFont.systemFont(ofSize: 26, weight: .bold)
         label.textAlignment = .center
@@ -51,7 +51,7 @@ class CategoryViewController: UIViewController{
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cv.translatesAutoresizingMaskIntoConstraints = false
         cv.backgroundColor = .systemBackground
-        cv.register(CategoryCell.self, forCellWithReuseIdentifier: "CategoryCell")
+        cv.register(CategoryCell.self, forCellWithReuseIdentifier: "CategoryCell") // extension
         cv.delegate = self
         cv.dataSource = self
         
@@ -106,7 +106,4 @@ extension CategoryViewController: UICollectionViewDelegate, UICollectionViewData
         vc.category = category
         navigationController?.pushViewController(vc, animated: true)
     }
-    
-    
 }
-
