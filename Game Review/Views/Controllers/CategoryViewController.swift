@@ -29,7 +29,6 @@ class CategoryViewController: UIViewController{
         view.backgroundColor = .systemBackground
         setupUI()
         setupCollectionViewLayout()
-        
         bindViewModel()
         viewModel.fetchCategories()
     }

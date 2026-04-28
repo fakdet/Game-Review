@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct RAWGGenreResponse: Codable, Sendable {
+nonisolated struct RAWGGenreResponse: Codable, Sendable {
     let results: [RAWGGenre]
 }
 
-struct RAWGGenre: Codable, Sendable {
+nonisolated struct RAWGGenre: Codable, Sendable {
     let id: Int
     let name: String
     let imageBackground: String?
@@ -24,7 +24,7 @@ struct RAWGGenre: Codable, Sendable {
 
 }
 
-struct RAWGGameResponse: Codable, Sendable {
+nonisolated struct RAWGGameResponse: Codable, Sendable {
     let results: [RAWGGame]
 }
 
@@ -50,6 +50,6 @@ struct RAWGPublisher: Codable, Sendable {
     let name: String
 }
 
-struct RAWGGameDetail: Codable, Sendable {
+nonisolated struct RAWGGameDetail: Codable, Sendable {
     let publishers: [RAWGPublisher]?
 }

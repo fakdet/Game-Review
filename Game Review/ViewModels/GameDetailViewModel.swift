@@ -31,9 +31,6 @@ class GameDetailViewModel {
         }
     }
     
-    var categoryNames: String {
-        return "Action, RPG" // Temporary - will connect to categories later on
-    }
     
     //MARK: - Review
     var graphics: Double    { game.review?.graphics ?? 0 }

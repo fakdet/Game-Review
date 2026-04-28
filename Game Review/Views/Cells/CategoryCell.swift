@@ -12,12 +12,10 @@ import SnapKit
 class CategoryCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
-        
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textColor = .white
-        
         return label
     }()
     
@@ -89,3 +87,4 @@ class CategoryCell: UICollectionViewCell {
         imageView.image = nil
     }
 }
+

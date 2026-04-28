@@ -17,6 +17,7 @@ class RealmManager {
         localData.status = status.rawValue
         
         if let r = review {
+           
             let lr = LocalReview()
             lr.graphics = r.graphics
             lr.soundDesign = r.soundDesign

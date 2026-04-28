@@ -25,13 +25,11 @@ class GameDetailViewController: UIViewController {
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
-    
     private let contentView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     private let gameImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +39,6 @@ class GameDetailViewController: UIViewController {
         iv.backgroundColor = .systemGray5
         return iv
     }()
-    
     private let gameTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -50,7 +47,6 @@ class GameDetailViewController: UIViewController {
         label.textAlignment = .center
         return label
     }()
-    
     private let infoCard: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -58,7 +54,6 @@ class GameDetailViewController: UIViewController {
         view.layer.cornerRadius = 12
         return view
     }()
-    
     private let publisherLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -66,7 +61,6 @@ class GameDetailViewController: UIViewController {
         label.numberOfLines = 0
         return label
     }()
-    
     private let releaseDateLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -74,7 +68,6 @@ class GameDetailViewController: UIViewController {
         label.numberOfLines = 0
         return label
     }()
-    
     private let statusLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -82,7 +75,6 @@ class GameDetailViewController: UIViewController {
         label.numberOfLines = 0
         return label
     }()
-    
     private let reviewCard: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -90,7 +82,6 @@ class GameDetailViewController: UIViewController {
         view.layer.cornerRadius = 12
         return view
     }()
-    
     private let reviewTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -98,7 +89,6 @@ class GameDetailViewController: UIViewController {
         label.font = .systemFont(ofSize: 20, weight: .bold)
         return label
     }()
-    
     private let editButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -128,7 +118,6 @@ class GameDetailViewController: UIViewController {
         tv.textColor = .placeholderText
         return tv
     }()
-    
     private let saveButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -161,9 +150,9 @@ class GameDetailViewController: UIViewController {
         title = viewModel.title
 
         setupUI()
-        view.layoutIfNeeded()
         populateData()
         setupActions()
+        setupKeyboardDismissal()
         viewModel.onPublisherLoaded = { [weak self] publisher in
             self?.publisherLabel.text = "Publisher: \(publisher)"
         }
@@ -275,6 +264,18 @@ class GameDetailViewController: UIViewController {
             make.bottom.equalToSuperview().inset(24)
         }
     }
+    private func setupKeyboardDismissal() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+        
+        scrollView.keyboardDismissMode = .onDrag
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
     
     private func addRatingRow(name: String, field: UITextField, topView: UIView) -> UIView {
 
@@ -309,6 +310,10 @@ class GameDetailViewController: UIViewController {
 
     private func setEditingMode(_ editing: Bool) {
         isEditingReview = editing
+        
+        if !editing {
+            view.endEditing(true)
+        }
         
         let fields = [graphicsField, soundField, artField, gameplayField, storyField, overallField]
         fields.forEach { $0.isUserInteractionEnabled = editing }
