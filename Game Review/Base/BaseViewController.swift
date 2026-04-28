@@ -49,6 +49,5 @@ class BaseViewController<T: BaseViewModel>: UIViewController {
     }
     private func handleLoadingState(_ loading: Bool) {
         //Add a global spinner for showing loading state
-        UIApplication.shared.isNetworkActivityIndicatorVisible = loading
     }
 }

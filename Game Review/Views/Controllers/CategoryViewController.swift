@@ -30,10 +30,6 @@ class CategoryViewController: BaseViewController<CategoryListViewModel>{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        setupUI()
-        setupCollectionViewLayout()
-        bindViewModel()
         viewModel.fetchCategories()
     }
     

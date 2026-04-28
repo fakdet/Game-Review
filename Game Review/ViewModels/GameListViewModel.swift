@@ -23,13 +23,25 @@ class GameListViewModel: BaseViewModel{
     func fetchGames() {
         isLoading?(true)
         
-        NetworkManager.shared.fetchGames(genreID: category.id) { [weak self] result in
-            self?.handleResult(result) { apiGames in
-                let mappedGames = apiGames.map { apiGame in
-                    var game = apiGame
-                    
+        NetworkManager.shared.request(endpoint: .games(genreId: category.id)) { [weak self] (result: Result<RAWGGameResponse, Error>) in
+            guard let self = self else { return }
+            
+            self.handleResult(result) { response in
+                let mappedGames = response.results.map { apiGame -> Game in
+                    var game = Game(
+                        id: apiGame.id,
+                        title: apiGame.name,
+                        categoryIDs: apiGame.genres.map { $0.id },
+                        rating: nil,
+                        status: .unplayed,
+                        publisher: apiGame.publishers?.first?.name,
+                        releaseDate: apiGame.released,
+                        review: nil,
+                        imageURL: apiGame.backgroundImage
+                    )
                     if let local = RealmManager.shared.getLocalData(for: game.id) {
-                        game.status = GameStatus(rawValue: local.status) ?? .unplayed // extension
+                        game.status = GameStatus(rawValue: local.status) ?? .unplayed
+                        
                         if let lr = local.review {
                             game.review = Review(
                                 graphics: lr.graphics,
@@ -45,9 +57,10 @@ class GameListViewModel: BaseViewModel{
                     }
                     return game
                 }
-                self?.allGames = mappedGames
-                self?.filteredGames = mappedGames
-                self?.onDataUpdated?()
+                
+                self.allGames = mappedGames
+                self.filteredGames = mappedGames
+                self.onDataUpdated?()
             }
         }
     }

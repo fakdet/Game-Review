@@ -64,11 +64,14 @@ class GameDetailViewModel: BaseViewModel{
     
     
     func fetchPublisher() {
-        NetworkManager.shared.fetchGameDetail(id: game.id) { [weak self] publisherName in
-            DispatchQueue.main.async {
-                if let name = publisherName {
-                    self?.game.publisher = name
-                    self?.onPublisherLoaded?(name)
+        NetworkManager.shared.request(endpoint: .detail(gameId: game.id)) { [weak self] (result: Result<RAWGGameDetail, Error>) in
+            guard let self = self else { return }
+            
+            self.handleResult(result) { detailedResponse in
+                if let publisherName = detailedResponse.publishers?.first?.name  {
+                    self.game.publisher = publisherName
+                    
+                    self.onPublisherLoaded?(publisherName)
                 }
             }
         }

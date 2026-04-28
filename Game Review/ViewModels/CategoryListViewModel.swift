@@ -12,9 +12,15 @@ class CategoryListViewModel: BaseViewModel{
     
     func fetchCategories() {
         isLoading?(true)
-        NetworkManager.shared.fetchGenres { [weak self] result in
-            self?.handleResult(result) { categories in
-                self?.categories = categories
+        
+        NetworkManager.shared.request(endpoint: .genres) { [weak self] (result: Result<RAWGGenreResponse, Error>) in
+            guard let self = self else { return }
+            
+            self.handleResult(result) { response in
+                let mappedCategories = response.results.map {
+                    Category(id: $0.id, name: $0.name, imageURL: $0.imageBackground)
+                }
+                self.categories = mappedCategories
             }
         }
     }
