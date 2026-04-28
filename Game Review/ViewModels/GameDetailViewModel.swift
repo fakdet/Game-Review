@@ -71,7 +71,7 @@ class GameDetailViewModel: BaseViewModel{
                 if let publisherName = detailedResponse.publishers?.first?.name  {
                     self.game.publisher = publisherName
                     
-                    self.onPublisherLoaded?(publisherName)
+//                    self.onPublisherLoaded?(publisherName)
                 }
             }
         }

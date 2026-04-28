@@ -60,7 +60,7 @@ class GameListViewModel: BaseViewModel{
                 
                 self.allGames = mappedGames
                 self.filteredGames = mappedGames
-                self.onDataUpdated?()
+//                self.onDataUpdated?(
             }
         }
     }

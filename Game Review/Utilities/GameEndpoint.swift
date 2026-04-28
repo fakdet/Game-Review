@@ -20,6 +20,17 @@ enum GameEndpoint {
         }
     }
     
+    var parameters: [String: Any] {
+        var params: [String: Any] = ["key": API.key]
+        switch self {
+        case .games(let genreID):
+            params["genres"] = genreID
+            params["page_size"] = 20
+        default: break
+        }
+        return params
+    }
+    
     var queryItems: [URLQueryItem] {
         var items = [URLQueryItem(name: "key", value: API.key)]
         switch self {

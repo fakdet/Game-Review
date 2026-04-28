@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 class NetworkManager {
     
@@ -14,24 +15,19 @@ class NetworkManager {
     private init() {}
     
     func request<T: Decodable>(endpoint: GameEndpoint, completion: @escaping (Result<T, Error>) -> Void) {
-        guard let url = endpoint.url else {
-            completion(.failure(NSError(domain: "Invalid Url", code: 0)))
-            return
-        }
+        let url = API.baseURL + endpoint.path
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            guard let data = data else { return }
-            
-            do {
-                let decodeData = try JSONDecoder().decode(T.self, from: data)
-                completion(.success(decodeData))
-            } catch {
+        AF.request(url,
+                   method: .get,
+                   parameters: endpoint.parameters)
+        .validate()
+        .responseDecodable(of: T.self) { response in
+            switch response.result {
+            case .success(let value):
+                completion(.success(value))
+            case .failure(let error):
                 completion(.failure(error))
             }
-        }.resume()
+        }
     }
 }
