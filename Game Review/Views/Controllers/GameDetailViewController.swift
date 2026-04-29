@@ -271,7 +271,7 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
         reviewTextView.alpha = editing ? 1.0 : 0.8
         
         saveButton.isHidden = !editing
-        editButton.setTitle(editing ? "\(L10n.GameDetail.cancel)" : "\(L10n.GameDetail.edit)", for: .normal)
+        editButton.setTitle(editing ? L10n.GameDetail.cancel : L10n.GameDetail.edit, for: .normal)
     }
     
     @objc private func editTapped() {

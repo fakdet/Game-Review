@@ -11,6 +11,11 @@ import SnapKit
 class BaseViewController<T: BaseViewModel>: UIViewController {
     //MARK: - Properties
     let viewModel: T
+    private lazy var loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
     
     init(viewModel: T) {
         self.viewModel = viewModel
@@ -25,6 +30,10 @@ class BaseViewController<T: BaseViewModel>: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        view.addSubview(loadingIndicator)
+        loadingIndicator.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
         setupUI()
         setupConstraints()
         bindBaseViewModel()
@@ -48,6 +57,6 @@ class BaseViewController<T: BaseViewModel>: UIViewController {
         present(alert, animated: true)
     }
     private func handleLoadingState(_ loading: Bool) {
-        //TO-DO add loading spiral
+        loading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
     }
 }

@@ -60,7 +60,6 @@ class GameListViewModel: BaseViewModel{
                 
                 self.allGames = mappedGames
                 self.filteredGames = mappedGames
-//                self.onDataUpdated?(
             }
         }
     }
@@ -121,8 +120,7 @@ class GameListViewModel: BaseViewModel{
         )
         
         filteredGames = allGames.filter { $0.categoryIDs.contains(category.id) }
-                onDataUpdated?()
-        
+        onDataUpdated?()
     }
     
     func updateGame(_ updatedGame: Game) {
