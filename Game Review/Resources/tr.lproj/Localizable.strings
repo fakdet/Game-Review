@@ -1,0 +1,38 @@
+//
+//  Localizable.strings
+//  Game Review
+//
+//  Created by M.  Azizcan Erdoğan on 29.04.2026.
+//
+
+"category.title" = "Oyun Kategorileri";
+
+"gamelist.search_placeholder" = "Oyun Ara";
+"gamelist.filter_button" = "Filtrele";
+"gamelist.filter_title" = "Duruma Göre Filtrele";
+"gamelist.empty" = "Bu şekilde bir oyun bulunamadı.";
+"gamelist.finished" = "Bitti";
+"gamelist.error" = "Hata";
+
+"gamecell.change_status" = "Durum Değiştir";
+
+"gamedetail.publisher" = "Yapımcı";
+"gamedetail.release_date" = "Çıkış Tarihi";
+"gamedetail.status" = "Durum";
+"gamedetail.review" = "İnceleme";
+"gamedetail.edit" = "Güncelle";
+"gamedetail.cancel" = "İptal";
+"gamedetail.save" = "İncelemeyi Kaydet";
+"gamedetail.graphics" = "Grafikler";
+"gamedetail.sound" = "Ses Dizaynı";
+"gamedetail.art" = "Sanat Dizaynı";
+"gamedetail.gameplay" = "Oynanış";
+"gamedetail.story" = "Hikaye";
+"gamedetail.overall" = "Ortalama";
+"gamedetail.review_placeholder" = "İncelemenizi Buraya Yazabilirsiniz..";
+
+"gamestatus.unplayed" = "Oynanmadı";
+"gamestatus.playing" = "Oynanıyor";
+"gamestatus.finished" = "Bitti";
+"gamestatus.reviewed" = "İncelendi";
+"gamestatus.filter_all" = "Hepsi";

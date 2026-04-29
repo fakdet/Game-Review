@@ -14,7 +14,7 @@ enum GameStatus: String, Codable, CaseIterable {
     
     //For the labels
     var title: String {
-        rawValue.capitalized
+        "gamestatus.\(rawValue)".localized
     }
     
     //For the dropdown menu

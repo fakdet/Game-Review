@@ -25,12 +25,7 @@ class GameDetailViewModel: BaseViewModel{
     var hasReview: Bool { game.review != nil }
     
     var status: String {
-        switch game.status {
-        case .unplayed: return "Unplayed"
-        case .playing:  return "Playing"
-        case .finished: return "Finished"
-        case .reviewed: return "Reviewed"
-        }
+        game.status.title
     }
     
     

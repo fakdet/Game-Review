@@ -14,7 +14,7 @@
 "gamelist.finished = Finished";
 "gamelist.error = Error";
 
-"gamecell.change_status = Change Status";
+"gamecell.change_status" = "Change Status";
 
 "gamedetail.publisher" = "Publisher";
 "gamedetail.release_date" = "Release Date";
@@ -23,12 +23,16 @@
 "gamedetail.edit" = "Edit";
 "gamedetail.cancel" = "Cancel";
 "gamedetail.save" = "Save Review";
-"gamedetail.graphics = Graphics";
-"gamedetail.sound = Sound Design";
-"gamedetail.art = Art Design";
-"gamedetail.gameplay = Gameplay";
-"gamedetail.story = Story";
-"gamedetail.overall = Overall";
+"gamedetail.graphics" = "Graphics";
+"gamedetail.sound" = "Sound Design";
+"gamedetail.art" = "Art Design";
+"gamedetail.gameplay" = "Gameplay";
+"gamedetail.story" = "Story";
+"gamedetail.overall" = "Overall";
 "gamedetail.review_placeholder" = "Write Your Review Here..";
 
+"gamestatus.unplayed" = "Unplayed";
+"gamestatus.playing" = "Playing";
+"gamestatus.finished" = "Finished";
+"gamestatus.reviewed" = "Reviewed";
 "gamestatus.filter_all" = "All";
