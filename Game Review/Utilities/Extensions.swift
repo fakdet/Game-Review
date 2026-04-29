@@ -71,3 +71,10 @@ extension Double {
         return String(format: "%.1f", self)
     }
 }
+
+// MARK: - Localization String
+extension String {
+    var localized: String {
+        NSLocalizedString(self, comment: "")
+    }
+}

@@ -1,0 +1,34 @@
+//
+//  Localizable.strings
+//  Game Review
+//
+//  Created by M.  Azizcan Erdoğan on 29.04.2026.
+//
+
+"category.title" = "Game Categories";
+
+"gamelist.search_placeholder" = "Search for a game";
+"gamelist.filter_button" = "Filter";
+"gamelist.filter_title" = "Filter By Status";
+"gamelist.empty" = "No games were found based on your search results";
+"gamelist.finished = Finished";
+"gamelist.error = Error";
+
+"gamecell.change_status = Change Status";
+
+"gamedetail.publisher" = "Publisher";
+"gamedetail.release_date" = "Release Date";
+"gamedetail.status" = "Status";
+"gamedetail.review" = "Review";
+"gamedetail.edit" = "Edit";
+"gamedetail.cancel" = "Cancel";
+"gamedetail.save" = "Save Review";
+"gamedetail.graphics = Graphics";
+"gamedetail.sound = Sound Design";
+"gamedetail.art = Art Design";
+"gamedetail.gameplay = Gameplay";
+"gamedetail.story = Story";
+"gamedetail.overall = Overall";
+"gamedetail.review_placeholder" = "Write Your Review Here..";
+
+"gamestatus.filter_all" = "All";

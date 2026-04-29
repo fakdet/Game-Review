@@ -74,13 +74,13 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
     }()
     private lazy var reviewTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Review"
+        label.text = L10n.GameDetail.review
         label.font = .systemFont(ofSize: 20, weight: .bold)
         return label
     }()
     private lazy var editButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Edit", for: .normal)
+        button.setTitle(L10n.GameDetail.edit, for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
         return button
     }()
@@ -99,14 +99,14 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
         tv.layer.cornerRadius = 8
         tv.isScrollEnabled = false
         tv.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        tv.text = "Write Your Review Here.."
+        tv.text = L10n.GameDetail.reviewPlaceholder
         tv.textColor = .placeholderText
         tv.delegate = self
         return tv
     }()
     private lazy var saveButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Save Review", for: .normal)
+        button.setTitle(L10n.GameDetail.save, for: .normal)
         button.backgroundColor = .systemBlue
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
@@ -204,12 +204,12 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
         
         var lastView: UIView = reviewTitleLabel
         
-        lastView = addRatingRow(name: "Graphics", field: graphicsField, topView: lastView)
-        lastView = addRatingRow(name: "Sound Design", field: soundField, topView: lastView)
-        lastView = addRatingRow(name: "Art Design", field: artField, topView: lastView)
-        lastView = addRatingRow(name: "Gameplay", field: gameplayField, topView: lastView)
-        lastView = addRatingRow(name: "Story", field: storyField, topView: lastView)
-        lastView = addRatingRow(name: "Overall", field: overallField, topView: lastView)
+        lastView = addRatingRow(name: L10n.GameDetail.graphics, field: graphicsField, topView: lastView)
+        lastView = addRatingRow(name: L10n.GameDetail.sound, field: soundField, topView: lastView)
+        lastView = addRatingRow(name: L10n.GameDetail.art, field: artField, topView: lastView)
+        lastView = addRatingRow(name: L10n.GameDetail.gameplay, field: gameplayField, topView: lastView)
+        lastView = addRatingRow(name: L10n.GameDetail.story, field: storyField, topView: lastView)
+        lastView = addRatingRow(name: L10n.GameDetail.overall, field: overallField, topView: lastView)
         
         reviewTextView.snp.makeConstraints { make in
             make.top.equalTo(lastView.snp.bottom).offset(16)
@@ -227,7 +227,7 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
     
     override func bindViewModel() {
         viewModel.onPublisherLoaded = { [weak self] publisher in
-            self?.publisherLabel.text = "Publisher: \(publisher)"
+            self?.publisherLabel.text = "\(L10n.GameDetail.publisher): \(publisher)"
         }
         
         viewModel.onDataUpdated = { [weak self] in
@@ -271,7 +271,7 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
         reviewTextView.alpha = editing ? 1.0 : 0.8
         
         saveButton.isHidden = !editing
-        editButton.setTitle(editing ? "Cancel" : "Edit", for: .normal)
+        editButton.setTitle(editing ? "\(L10n.GameDetail.cancel)" : "\(L10n.GameDetail.edit)", for: .normal)
     }
     
     @objc private func editTapped() {
@@ -296,16 +296,16 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
         
         setEditingMode(false)
         editButton.isHidden = false
-        statusLabel.text = "Status: \(viewModel.status)"
+        statusLabel.text = "\(L10n.GameDetail.status): \(viewModel.status)"
         
         delegate?.didUpdateGame(viewModel.game)
     }
     
     private func populateData(){
         gameTitleLabel.text = viewModel.title
-        publisherLabel.text = "Publisher: \(viewModel.publisher)"
-        releaseDateLabel.text = "Release Date: \(viewModel.releaseDate)"
-        statusLabel.text = "Status: \(viewModel.status)"
+        publisherLabel.text = "\(L10n.GameDetail.publisher): \(viewModel.publisher)"
+        releaseDateLabel.text = "\(L10n.GameDetail.releaseDate): \(viewModel.releaseDate)"
+        statusLabel.text = "\(L10n.GameDetail.status): \(viewModel.status)"
         
         if viewModel.hasReview {
             graphicsField.text = viewModel.graphics.ratingString
@@ -403,7 +403,7 @@ extension GameDetailViewController: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "Write Your Review Here.."
+            textView.text = L10n.GameDetail.reviewPlaceholder
             textView.textColor = .placeholderText
         }
     }

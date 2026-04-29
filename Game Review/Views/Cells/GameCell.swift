@@ -118,7 +118,7 @@ class GameCell: UITableViewCell{
         statusButton.setTitle(game.status.title, for: .normal)
         
         //Dropdown menu build
-        statusButton.menu = UIMenu(title: "Change Status", children:
+        statusButton.menu = UIMenu(title: L10n.GameCell.changeStatus, children:
             GameStatus.allCases.filter { $0 != .reviewed }.map { status in
                 UIAction(title: status.title, image: UIImage(systemName: status.icon)) { _ in
                     onStatusChange(status)

@@ -14,13 +14,13 @@ class GameListViewController: BaseViewController<GameListViewModel> {
     //MARK: UI elements
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = "Search for a game"
+        searchBar.placeholder = L10n.GameList.searchPlaceholder
         searchBar.delegate = self
         return searchBar
     }()
     private lazy var filterButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Filter", for: .normal)
+        button.setTitle(L10n.GameList.filterButton, for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
         button.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         return button
@@ -39,7 +39,7 @@ class GameListViewController: BaseViewController<GameListViewModel> {
     }()
     private lazy var emptyLabel: UILabel = {
         let label = UILabel()
-        label.text = "No games were found based on your search results"
+        label.text = L10n.GameList.empty
         label.textAlignment = .center
         label.textColor = .secondaryLabel
         label.font = .systemFont(ofSize: 16, weight: .medium)
@@ -131,7 +131,7 @@ class GameListViewController: BaseViewController<GameListViewModel> {
             self?.updateTableView()
         }
         viewModel.onError = { error in
-            print("Error!: \(error)")
+            print("\(L10n.GameList.error)!: \(error)")
         }
     }
     
@@ -151,7 +151,7 @@ class GameListViewController: BaseViewController<GameListViewModel> {
         let finished = viewModel.count(for: .finished)
         let reviewed = viewModel.count(for: .reviewed)
         
-        footerLabel.text = "\(finished + reviewed)/\(total) Finished"
+        footerLabel.text = "\(finished + reviewed)/\(total) \(L10n.GameList.finished)"
         
         //remove old segments
         progressBar.subviews.forEach { $0.removeFromSuperview() }
@@ -178,7 +178,7 @@ class GameListViewController: BaseViewController<GameListViewModel> {
     
     //MARK: - Actions
     @objc private func filterButtonTapped(){
-        let actionSheet = UIAlertController(title: "Filter By Status", message: nil, preferredStyle: .actionSheet)
+        let actionSheet = UIAlertController(title: L10n.GameList.filterTitle, message: nil, preferredStyle: .actionSheet)
         
         for option in GameStatus.filterOptions {
             actionSheet.addAction(UIAlertAction(title: option.0, style: .default) { _ in
@@ -186,7 +186,7 @@ class GameListViewController: BaseViewController<GameListViewModel> {
                 self.updateTableView()
             })
         }
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        actionSheet.addAction(UIAlertAction(title: L10n.GameDetail.cancel, style: .cancel))
         present(actionSheet, animated: true)
     }
 }

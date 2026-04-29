@@ -11,7 +11,7 @@ class CategoryViewController: BaseViewController<CategoryListViewModel>{
     //MARK: UI elements
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Game Categories"
+        label.text = L10n.Category.title
         label.font = UIFont.systemFont(ofSize: 26, weight: .bold)
         label.textAlignment = .center
         return label
