@@ -198,6 +198,7 @@ class GameListViewController: BaseViewController<GameListViewModel> {
     }
 }
 
+//MARK: - Extensions
 extension GameListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfItems()

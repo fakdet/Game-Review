@@ -19,10 +19,9 @@ class CategoryViewController: BaseViewController<CategoryListViewModel>{
     private lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cv.backgroundColor = .systemBackground
-        cv.register(cellType: CategoryCell.self) // extension
+        cv.register(cellType: CategoryCell.self)
         cv.delegate = self
         cv.dataSource = self
-        
         return cv
     }()
     
@@ -63,7 +62,6 @@ class CategoryViewController: BaseViewController<CategoryListViewModel>{
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        
         let safeWidth = view.safeAreaLayoutGuide.layoutFrame.width
         let cellWidth = (safeWidth - 48) / 2
         layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
@@ -95,7 +93,6 @@ extension CategoryViewController: UICollectionViewDelegate, UICollectionViewData
 }
 
 
-
 extension UICollectionView {
     func dequeueReusableCell<T: UICollectionViewCell>(for indexpath: IndexPath) -> T {
         guard let cell = dequeueReusableCell(withReuseIdentifier: T.identifier, for: indexpath) as? T else {
@@ -103,6 +100,7 @@ extension UICollectionView {
         }
         return cell
     }
+    
     func register<T: UICollectionViewCell>(cellType: T.Type) {
         register(cellType, forCellWithReuseIdentifier: T.identifier)
     }

@@ -116,13 +116,9 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = viewModel.title
-
         populateData()
         setupActions()
         setupKeyboardDismissal()
-//        viewModel.onPublisherLoaded = { [weak self] publisher in
-//            self?.publisherLabel.text = "Publisher: \(publisher)"
-//        }
         viewModel.fetchPublisher()
     }
     
@@ -304,6 +300,7 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
         
         delegate?.didUpdateGame(viewModel.game)
     }
+    
     private func populateData(){
         gameTitleLabel.text = viewModel.title
         publisherLabel.text = "Publisher: \(viewModel.publisher)"
@@ -311,12 +308,12 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
         statusLabel.text = "Status: \(viewModel.status)"
         
         if viewModel.hasReview {
-            graphicsField.text = String(format: "%.1f", viewModel.graphics)
-            soundField.text    = String(format: "%.1f", viewModel.soundDesign)
-            artField.text      = String(format: "%.1f", viewModel.artDesign)
-            gameplayField.text = String(format: "%.1f", viewModel.gameplay)
-            storyField.text    = String(format: "%.1f", viewModel.story)
-            overallField.text  = String(format: "%.1f", viewModel.overallRating)
+            graphicsField.text = viewModel.graphics.ratingString
+            soundField.text    = viewModel.soundDesign.ratingString
+            artField.text      = viewModel.artDesign.ratingString
+            gameplayField.text = viewModel.gameplay.ratingString
+            storyField.text    = viewModel.story.ratingString
+            overallField.text  = viewModel.overallRating.ratingString
             
             reviewTextView.text = viewModel.reviewText
             reviewTextView.textColor = .label
@@ -332,6 +329,7 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
             gameImageView.kf.setImage(with: url, placeholder: UIImage(systemName: "photo"))
         }
     }
+    
     //MARK: - Helpers
     private func makeRatingField() -> UITextField {
         let tf = UITextField()
@@ -347,7 +345,6 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
     }
     
     private func addRatingRow(name: String, field: UITextField, topView: UIView) -> UIView {
-
         let titleLabel = UILabel()
         titleLabel.text = name
         titleLabel.font = .systemFont(ofSize: 15, weight: .medium)
@@ -358,19 +355,17 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
         row.axis = .horizontal
         row.spacing = 8
         row.alignment = .center
-
         reviewCard.addSubview(row)
 
         row.snp.makeConstraints { make in
             make.top.equalTo(topView.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(16)
         }
-
         return row
     }
 }
 
-
+//MARK: - Extensions
 extension GameDetailViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         let fields = [graphicsField, soundField, artField, gameplayField, storyField, overallField]
@@ -417,6 +412,12 @@ extension GameDetailViewController: UITextViewDelegate {
 extension UITextField {
     var doubleValue: Double {
         return Double(self.text ?? "") ?? 0.0
+    }
+}
+
+extension Double {
+    var ratingString: String {
+        return String(format: "%.1f", self)
     }
 }
 
