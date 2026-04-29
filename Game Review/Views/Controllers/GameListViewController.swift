@@ -28,7 +28,7 @@ class GameListViewController: BaseViewController<GameListViewModel> {
     private lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero)
         tv.backgroundColor = .systemBackground
-        tv.register(GameCell.self, forCellReuseIdentifier: "GameCell") // Extension
+        tv.register(cellType: GameCell.self)
         tv.backgroundColor = .systemGray6
         tv.layer.cornerRadius = 10
         tv.clipsToBounds = true
@@ -205,7 +205,7 @@ extension GameListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! GameCell // Extension
+        let cell: GameCell = tableView.dequeueReusableCell(for: indexPath)
         let game = viewModel.game(at: indexPath.row)
         
         cell.configure(with: game) { [weak self] newStatus in

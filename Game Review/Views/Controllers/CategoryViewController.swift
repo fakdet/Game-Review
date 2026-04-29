@@ -91,17 +91,3 @@ extension CategoryViewController: UICollectionViewDelegate, UICollectionViewData
         navigationController?.pushViewController(vc, animated: true)
     }
 }
-
-
-extension UICollectionView {
-    func dequeueReusableCell<T: UICollectionViewCell>(for indexpath: IndexPath) -> T {
-        guard let cell = dequeueReusableCell(withReuseIdentifier: T.identifier, for: indexpath) as? T else {
-            fatalError("Cell ws not able to be created: \(T.identifier)")
-        }
-        return cell
-    }
-    
-    func register<T: UICollectionViewCell>(cellType: T.Type) {
-        register(cellType, forCellWithReuseIdentifier: T.identifier)
-    }
-}

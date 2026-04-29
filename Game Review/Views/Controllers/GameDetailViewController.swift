@@ -376,6 +376,7 @@ extension GameDetailViewController: UITextFieldDelegate {
         value = (value * 10).rounded() / 10 // 1 decimal
         textField.text = String(format: "%.1f", value)
     }
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let fields = [graphicsField, soundField, artField, gameplayField, storyField, overallField]
         guard fields.contains(textField) else { return true }
@@ -390,7 +391,6 @@ extension GameDetailViewController: UITextFieldDelegate {
         
         return true
     }
-    
 }
 
 extension GameDetailViewController: UITextViewDelegate {
@@ -406,18 +406,6 @@ extension GameDetailViewController: UITextViewDelegate {
             textView.text = "Write Your Review Here.."
             textView.textColor = .placeholderText
         }
-    }
-}
-
-extension UITextField {
-    var doubleValue: Double {
-        return Double(self.text ?? "") ?? 0.0
-    }
-}
-
-extension Double {
-    var ratingString: String {
-        return String(format: "%.1f", self)
     }
 }
 
