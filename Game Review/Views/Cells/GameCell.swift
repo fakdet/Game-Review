@@ -109,39 +109,25 @@ class GameCell: UITableViewCell{
         if let urlString = game.imageURL, let url = URL(string: urlString) {
             gameImageView.kf.setImage(
                 with: url,
-                placeholder: UIImage(systemName: "photo"), // "photo" is from Apple's SF Symbols Library, this actually exists.
+                placeholder: UIImage(systemName: "photo"), // temp file
                 options: [.cacheOriginalImage]
             )
         } else {
             gameImageView.image = UIImage(systemName: "photo")
         }
-        switch game.status {
-        case .unplayed: statusButton.setTitle("Unplayed", for: .normal)
-        case .playing:  statusButton.setTitle("Playing", for: .normal)
-        case .finished: statusButton.setTitle("Finished", for: .normal)
-        case .reviewed: statusButton.setTitle("Reviewed", for: .normal)
-        }
+        statusButton.setTitle(game.status.title, for: .normal)
         
         //Dropdown menu build
-        statusButton.menu = UIMenu(title: "Change Status", children: [
-            UIAction(title: "Unplayed", image: UIImage(systemName: "circle")) { _ in
-                onStatusChange(.unplayed)
-            },
-            UIAction(title: "Playing", image: UIImage(systemName: "play.circle")) { _ in
-                onStatusChange(.playing)
-            },
-            UIAction(title: "Finished", image: UIImage(systemName: "checkmark.circle")) { _ in
-                onStatusChange(.finished)
-            },
-        ])
+        statusButton.menu = UIMenu(title: "Change Status", children:
+            GameStatus.allCases.filter { $0 != .reviewed }.map { status in
+                UIAction(title: status.title, image: UIImage(systemName: status.icon)) { _ in
+                    onStatusChange(status)
+                }
+            }
+        )
     }
     
     func updateStatusOnly(to status: GameStatus) {
-        switch status {
-        case .unplayed: statusButton.setTitle("Unplayed", for: .normal)
-        case .playing:  statusButton.setTitle("Playing", for: .normal)
-        case .finished: statusButton.setTitle("Finished", for: .normal)
-        case .reviewed: statusButton.setTitle("Reviewed", for: .normal)
-        }
+        statusButton.setTitle(status.title, for: .normal)
     }
 }

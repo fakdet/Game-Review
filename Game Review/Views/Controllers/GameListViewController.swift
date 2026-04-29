@@ -179,15 +179,8 @@ class GameListViewController: BaseViewController<GameListViewModel> {
     //MARK: - Actions
     @objc private func filterButtonTapped(){
         let actionSheet = UIAlertController(title: "Filter By Status", message: nil, preferredStyle: .actionSheet)
-        let filterOptions: [(String, GameStatus?)] = [
-                    ("All", nil),
-                    ("Unplayed", .unplayed),
-                    ("Playing", .playing),
-                    ("Finished", .finished),
-                    ("Reviewed", .reviewed)
-                ]
         
-        for option in filterOptions {
+        for option in GameStatus.filterOptions {
             actionSheet.addAction(UIAlertAction(title: option.0, style: .default) { _ in
                 self.viewModel.filterByStatus(option.1)
                 self.updateTableView()

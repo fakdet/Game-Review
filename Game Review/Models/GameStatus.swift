@@ -5,9 +5,29 @@
 //  Created by M.  Azizcan Erdoğan on 17.04.2026.
 //
 
-enum GameStatus: String, Codable {
+import Foundation
+enum GameStatus: String, Codable, CaseIterable {
     case unplayed
     case playing
     case finished
     case reviewed
+    
+    //For the labels
+    var title: String {
+        rawValue.capitalized
+    }
+    
+    //For the dropdown menu
+    var icon: String {
+        switch self {
+        case .unplayed: return "circle"
+        case .playing:  return "play.circle"
+        case .finished: return "checkmark.circle"
+        case .reviewed: return "star.circle"
+        }
+    }
+
+    static var filterOptions: [(String, GameStatus?)] {
+        [("All", nil)] + GameStatus.allCases.map { ($0.title, $0) }
+    }
 }
