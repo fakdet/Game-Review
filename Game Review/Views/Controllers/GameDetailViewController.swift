@@ -205,11 +205,11 @@ class GameDetailViewController: BaseViewController<GameDetailViewModel> {
         var lastView: UIView = reviewTitleLabel
         
         lastView = addRatingRow(name: L10n.GameDetail.graphics, field: graphicsField, topView: lastView)
-        lastView = addRatingRow(name: L10n.GameDetail.sound, field: soundField, topView: lastView)
-        lastView = addRatingRow(name: L10n.GameDetail.art, field: artField, topView: lastView)
+        lastView = addRatingRow(name: L10n.GameDetail.sound,    field: soundField, topView: lastView)
+        lastView = addRatingRow(name: L10n.GameDetail.art,      field: artField, topView: lastView)
         lastView = addRatingRow(name: L10n.GameDetail.gameplay, field: gameplayField, topView: lastView)
-        lastView = addRatingRow(name: L10n.GameDetail.story, field: storyField, topView: lastView)
-        lastView = addRatingRow(name: L10n.GameDetail.overall, field: overallField, topView: lastView)
+        lastView = addRatingRow(name: L10n.GameDetail.story,    field: storyField, topView: lastView)
+        lastView = addRatingRow(name: L10n.GameDetail.overall,  field: overallField, topView: lastView)
         
         reviewTextView.snp.makeConstraints { make in
             make.top.equalTo(lastView.snp.bottom).offset(16)
