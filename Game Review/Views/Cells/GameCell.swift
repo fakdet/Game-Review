@@ -110,7 +110,7 @@ class GameCell: UITableViewCell{
             gameImageView.kf.setImage(
                 with: url,
                 placeholder: UIImage(systemName: "photo"), // temp file
-                options: [.cacheOriginalImage]
+                options: [.cacheOriginalImage] // Cache!!
             )
         } else {
             gameImageView.image = UIImage(systemName: "photo")

@@ -79,7 +79,9 @@ class CategoryCell: UICollectionViewCell {
     func configure(with title: String, imageURL: String?) {
         titleLabel.text = title
         if let urlString = imageURL, let url = URL(string: urlString) {
-            imageView.kf.setImage(with: url, placeholder: UIImage(systemName: "photo"))
+            imageView.kf.setImage(with: url,
+                                  placeholder: UIImage(systemName: "photo"),
+                                  options:[.cacheOriginalImage])
         }
     }
     
