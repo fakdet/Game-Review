@@ -39,7 +39,6 @@ Game Review is a native iOS app that connects to the [RAWG Video Games Database 
 - Status Tracking — Categorize games as Unplayed, Playing, Finished, or Reviewed
 - Visual Progress Bar — Segmented progress bar showing status distribution per genre
 - Offline Persistence — All ratings, reviews, and statuses are stored locally via Realm
-- Pagination — Dynamically loads more games as the user scrolls
 - Localization — Full English and Turkish language support
 - Network Inspector — Netfox integration for debug-mode network traffic inspection
 - Image Caching — Kingfisher caches game and genre images to disk for offline use
