@@ -54,18 +54,18 @@ The app is built on the MVVM (Model-View-ViewModel) design pattern with a shared
 +---------------------------------------------+
 |                  View Layer                  |
 |   CategoryVC --> GameListVC --> GameDetailVC |
-|         (BaseViewController<T>)             |
+|         (BaseViewController<T>)              |
 +------------------+---------------------------+
                    |  Closures (onDataUpdated,
                    |  onError, isLoading)
 +------------------v---------------------------+
 |               ViewModel Layer                |
-|  CategoryListVM  GameListVM  GameDetailVM   |
-|            (BaseViewModel)                  |
+|  CategoryListVM  GameListVM  GameDetailVM    |
+|            (BaseViewModel)                   |
 +------------------+---------------------------+
                    |
        +-----------+-----------+
-       v                       v
+       v                       v    
 +---------------+     +----------------+
 | NetworkManager|     |  RealmManager  |
 |  (Alamofire)  |     |  (Local DB)    |
@@ -185,8 +185,6 @@ enum API {
 ```
 
 5. Build and run
-
-Select a simulator or device and press Cmd+R
 
 ---
 
