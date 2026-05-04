@@ -7,7 +7,9 @@
 
 import UIKit
 import Kingfisher
+#if DEBUG
 import netfox
+#endif
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

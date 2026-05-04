@@ -6,7 +6,9 @@
 //
 import UIKit
 import SnapKit
+#if DEBUG
 import netfox
+#endif
 
 class CategoryViewController: BaseViewController<CategoryListViewModel>{
     //MARK: UI elements
@@ -25,13 +27,14 @@ class CategoryViewController: BaseViewController<CategoryListViewModel>{
         cv.dataSource = self
         return cv
     }()
+    #if DEBUG
     private lazy var debugButton: UIBarButtonItem = {
         UIBarButtonItem(image: UIImage(systemName: "ladybug"),
                         style: .plain,
                         target: self,
                         action: #selector(openNetfox))
     }()
-    
+    #endif
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.fetchCategories()
@@ -78,11 +81,12 @@ class CategoryViewController: BaseViewController<CategoryListViewModel>{
         
         collectionView.setCollectionViewLayout(layout, animated: false)
     }
-    
+    #if DEBUG
     //actions
     @objc private func openNetfox() {
         NFX.sharedInstance().show()
     }
+    #endif
 }
 
 extension CategoryViewController: UICollectionViewDelegate, UICollectionViewDataSource {
