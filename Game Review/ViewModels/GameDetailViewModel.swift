@@ -8,6 +8,7 @@
 import Foundation
 
 class GameDetailViewModel: BaseViewModel{
+    weak var coordinator: MainCoordinator?
     //MARK: - Properties
     private(set) var game: Game
     var onPublisherLoaded: ((String) -> Void)?

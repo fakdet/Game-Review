@@ -9,6 +9,7 @@ import Foundation
 
 class CategoryListViewModel: BaseViewModel{
     private var categories: [Category] = []
+    weak var coordinator: MainCoordinator?
     
     func fetchCategories() {
         isLoading?(true)
@@ -36,5 +37,9 @@ class CategoryListViewModel: BaseViewModel{
     }
     func imageURL(for index: Int) -> String? {
         return categories[index].imageURL
+    }
+    func didSelectCategory(at index: Int) {
+        guard let selectedCategory = category(at: index) else { return }
+        coordinator?.showGameList(for: selectedCategory)
     }
 }

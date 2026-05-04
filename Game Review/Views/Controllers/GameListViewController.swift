@@ -163,7 +163,6 @@ class GameListViewController: BaseViewController<GameListViewModel> {
             (finished, .systemBlue),
             (reviewed, .systemGreen)
         ]
-        
         var currentX: CGFloat = 0
         let totalWidth = progressBar.bounds.width
         
@@ -216,13 +215,7 @@ extension GameListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let game = viewModel.game(at: indexPath.row)
-        
-        let detailVM = GameDetailViewModel(game: game)
-        let detailVC = GameDetailViewController(viewModel: detailVM)
-        
-        detailVC.delegate = self
-        navigationController?.pushViewController(detailVC, animated: true)
+        viewModel.didSelectGame(at: indexPath.row, delegate: self)
     }
 }
 

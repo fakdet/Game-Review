@@ -9,6 +9,7 @@ import Foundation
 
 class GameListViewModel: BaseViewModel{
     private let category: Category
+    weak var coordinator: MainCoordinator?
     private var allGames: [Game] = []
     private var filteredGames: [Game] = []
     
@@ -123,11 +124,16 @@ class GameListViewModel: BaseViewModel{
         onDataUpdated?()
     }
     
-    func updateGame(_ updatedGame: Game) {
-            guard let index = allGames.firstIndex(where: { $0.id == updatedGame.id }) else { return }
-            allGames[index] = updatedGame
-            filteredGames = allGames.filter { $0.categoryIDs.contains(category.id) }
-            onDataUpdated?()
-        }
+    func didSelectGame(at index: Int, delegate: GameDetailDelegate) {
+        let selectedGame = game(at: index)
+        coordinator?.showGameDetail(for: selectedGame, delegate: delegate)
+    }
     
+    func updateGame(_ updatedGame: Game) {
+        guard let index = allGames.firstIndex(where: { $0.id == updatedGame.id }) else { return }
+        allGames[index] = updatedGame
+        filteredGames = allGames.filter { $0.categoryIDs.contains(category.id) }
+        onDataUpdated?()
+    }
+
 }

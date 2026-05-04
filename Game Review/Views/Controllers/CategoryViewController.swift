@@ -11,6 +11,7 @@ import netfox
 #endif
 
 class CategoryViewController: BaseViewController<CategoryListViewModel>{
+    weak var coordinator: MainCoordinator?
     //MARK: UI elements
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -34,7 +35,7 @@ class CategoryViewController: BaseViewController<CategoryListViewModel>{
                         target: self,
                         action: #selector(openNetfox))
     }()
-    #endif
+    #endif // DEBUG
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.fetchCategories()
@@ -86,7 +87,7 @@ class CategoryViewController: BaseViewController<CategoryListViewModel>{
     @objc private func openNetfox() {
         NFX.sharedInstance().show()
     }
-    #endif
+    #endif // DEBUG
 }
 
 extension CategoryViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -104,9 +105,6 @@ extension CategoryViewController: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath){
-        guard let category = viewModel.category(at: indexPath.item) else { return }
-        let gameListVM = GameListViewModel(category: category)
-        let vc = GameListViewController(viewModel: gameListVM)
-        navigationController?.pushViewController(vc, animated: true)
+        viewModel.didSelectCategory(at: indexPath.item)
     }
 }
