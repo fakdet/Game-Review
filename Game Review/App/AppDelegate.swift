@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+import netfox
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,10 +19,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!)
         
         let cache = ImageCache.default
-        
         cache.memoryStorage.config.totalCostLimit = 1024 * 1024 * 10 // 10 MB
         cache.diskStorage.config.sizeLimit = 1024 * 1024 * 100 // 100 MB
         cache.diskStorage.config.expiration = .days(7)
+        
+        #if DEBUG
+        NFX.sharedInstance().start()
+        #endif
         
         return true
     }

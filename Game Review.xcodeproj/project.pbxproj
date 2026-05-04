@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C15998B2FA875EA00F023E6 /* netfox in Frameworks */ = {isa = PBXBuildFile; productRef = 9C15998A2FA875EA00F023E6 /* netfox */; };
 		9C8871D82F98D92D00B40FC1 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9C8871D72F98D92D00B40FC1 /* RealmSwift */; };
 		9C8871DB2F98F13100B40FC1 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 9C8871DA2F98F13100B40FC1 /* Kingfisher */; };
 		9C8872E92F9B651800B40FC1 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 9C8872E82F9B651800B40FC1 /* SnapKit-Dynamic */; };
@@ -56,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C15998B2FA875EA00F023E6 /* netfox in Frameworks */,
 				9C8871DB2F98F13100B40FC1 /* Kingfisher in Frameworks */,
 				9CA6785C2FA0ED5E00A8DB9A /* Alamofire in Frameworks */,
 				9C8871D82F98D92D00B40FC1 /* RealmSwift in Frameworks */,
@@ -115,6 +117,7 @@
 				9C8871DA2F98F13100B40FC1 /* Kingfisher */,
 				9C8872E82F9B651800B40FC1 /* SnapKit-Dynamic */,
 				9CA6785B2FA0ED5E00A8DB9A /* Alamofire */,
+				9C15998A2FA875EA00F023E6 /* netfox */,
 			);
 			productName = "Game Review";
 			productReference = 9C1093A42F9223A500531880 /* Game Review.app */;
@@ -150,6 +153,7 @@
 				9C8871D92F98F13100B40FC1 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				9C8872E52F9B651800B40FC1 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				9CA6785A2FA0ED5E00A8DB9A /* XCRemoteSwiftPackageReference "Alamofire" */,
+				9C1599892FA875EA00F023E6 /* XCRemoteSwiftPackageReference "netfox" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9C1093A52F9223A500531880 /* Products */;
@@ -389,6 +393,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		9C1599892FA875EA00F023E6 /* XCRemoteSwiftPackageReference "netfox" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kasketis/netfox";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.21.0;
+			};
+		};
 		9C8871D42F98D92D00B40FC1 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
@@ -424,6 +436,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		9C15998A2FA875EA00F023E6 /* netfox */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9C1599892FA875EA00F023E6 /* XCRemoteSwiftPackageReference "netfox" */;
+			productName = netfox;
+		};
 		9C8871D72F98D92D00B40FC1 /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9C8871D42F98D92D00B40FC1 /* XCRemoteSwiftPackageReference "realm-swift" */;

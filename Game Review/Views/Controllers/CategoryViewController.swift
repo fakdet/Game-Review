@@ -6,6 +6,7 @@
 //
 import UIKit
 import SnapKit
+import netfox
 
 class CategoryViewController: BaseViewController<CategoryListViewModel>{
     //MARK: UI elements
@@ -24,10 +25,19 @@ class CategoryViewController: BaseViewController<CategoryListViewModel>{
         cv.dataSource = self
         return cv
     }()
+    private lazy var debugButton: UIBarButtonItem = {
+        UIBarButtonItem(image: UIImage(systemName: "ladybug"),
+                        style: .plain,
+                        target: self,
+                        action: #selector(openNetfox))
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.fetchCategories()
+        #if DEBUG
+        navigationItem.rightBarButtonItem = debugButton
+        #endif
     }
     
     override func setupUI()
@@ -67,6 +77,11 @@ class CategoryViewController: BaseViewController<CategoryListViewModel>{
         layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
         
         collectionView.setCollectionViewLayout(layout, animated: false)
+    }
+    
+    //actions
+    @objc private func openNetfox() {
+        NFX.sharedInstance().show()
     }
 }
 
