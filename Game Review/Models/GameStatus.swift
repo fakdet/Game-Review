@@ -27,7 +27,7 @@ enum GameStatus: String, Codable, CaseIterable {
         }
     }
 
-    static var filterOptions: [(String, GameStatus?)] {
+    static var filterOptions: [(title: String, status: GameStatus?)] {
         [("All", nil)] + GameStatus.allCases.map { ($0.title, $0) }
     }
 }

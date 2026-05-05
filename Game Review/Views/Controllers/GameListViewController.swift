@@ -179,10 +179,9 @@ class GameListViewController: BaseViewController<GameListViewModel> {
     @objc private func filterButtonTapped(){
         let actionSheet = UIAlertController(title: L10n.GameList.filterTitle, message: nil, preferredStyle: .actionSheet)
         
-        for option in GameStatus.filterOptions {
-            actionSheet.addAction(UIAlertAction(title: option.0, style: .default) { _ in
-                self.viewModel.filterByStatus(option.1)
-                self.updateTableView()
+        for option in viewModel.getFilterOptions() {
+            actionSheet.addAction(UIAlertAction(title: option.title, style: .default) { _ in
+                self.viewModel.filterByStatus(option.status)
             })
         }
         actionSheet.addAction(UIAlertAction(title: L10n.GameDetail.cancel, style: .cancel))
@@ -211,10 +210,11 @@ extension GameListViewController: UITableViewDelegate, UITableViewDataSource {
             self.updateEmptyState()
         }
         return cell
-    }
+    }   
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
         viewModel.didSelectGame(at: indexPath.row, delegate: self)
     }
 }

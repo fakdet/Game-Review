@@ -98,6 +98,10 @@ class GameListViewModel: BaseViewModel{
         onDataUpdated?()
     }
     
+    func getFilterOptions() -> [(title: String, status: GameStatus?)] {
+        return GameStatus.filterOptions
+    }
+    
     func count(for status: GameStatus) -> Int{
         return filteredGames.filter { $0.status == status }.count
     }
